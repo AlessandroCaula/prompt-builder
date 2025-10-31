@@ -15,7 +15,7 @@
   "license": "MIT",
   "commands": [
     {
-      "name": "prompt-builder",
+      "name": "index",
       "title": "Prompt Builder",
       "description": "",
       "mode": "view"
