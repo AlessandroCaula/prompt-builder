@@ -1,6 +1,7 @@
 type Tone = "None" | "Neutral" | "Formal" | "Friendly" | "Persuasive" | "Academic";
 
 export interface FormValues {
+  title: string;
   role?: string;
   task: string;
   reference?: string;

@@ -8,13 +8,15 @@ import { validateForm } from "../utils/validation";
 const PromptForm = () => {
   const { push } = useNavigation();
   const [taskError, setTaskError] = useState<string | undefined>();
+  const [titleError, setTitleError] = useState<string | undefined>();
   const [showAdvanced, setShowAdvanced] = useState<boolean>(false);
 
   const handlePreviewPrompt = async (values: FormValues) => {
     // Validate the form values
     const errors = validateForm(values);
-    if (errors.task) {
-      setTaskError(errors.task);
+    if (errors.task || errors.title) {
+      if (errors.task) setTaskError(errors.task);
+      if (errors.title) setTitleError(errors.title);
       return;
     }
 
@@ -27,8 +29,9 @@ const PromptForm = () => {
   const handleCopyToClipboard = async (values: FormValues) => {
     // Validate the form values
     const errors = validateForm(values);
-    if (errors.task) {
-      setTaskError(errors.task);
+    if (errors.task || errors.title) {
+      if (errors.task) setTaskError(errors.task);
+      if (errors.title) setTitleError(errors.title);
       return;
     }
 
@@ -62,10 +65,13 @@ const PromptForm = () => {
       <Form.Description text="Build your prompt" />
 
       <Form.TextField
-        id="role"
-        title="Role"
-        placeholder="E.g. Data Scientist, UX Writer..."
-        info="Who is the AI supposed to be?"
+        id="title"
+        title="Title"
+        placeholder="Prompt Title"
+        error={titleError}
+        onChange={(value) => {
+          if (titleError && value.trim().length > 0) setTitleError(undefined);
+        }}
       />
 
       <Form.TextArea
@@ -78,6 +84,13 @@ const PromptForm = () => {
         onChange={(value) => {
           if (taskError && value.trim().length > 0) setTaskError(undefined);
         }}
+      />
+
+      <Form.TextField
+        id="role"
+        title="Role"
+        placeholder="E.g. Data Scientist, UX Writer..."
+        info="Who is the AI supposed to be?"
       />
 
       <Form.TextArea

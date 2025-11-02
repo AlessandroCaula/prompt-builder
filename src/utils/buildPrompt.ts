@@ -23,7 +23,7 @@ const buildPrompt = (values: FormValues): string => {
   }
   // Add the audience if present
   if (values.audience) {
-    finalPrompt += `Target audience: \n${values.audience} \n \n`;
+    finalPrompt += `Target audience: ${values.audience} \n \n`;
   }
   // Add an example if present
   if (values.example) {
@@ -38,7 +38,7 @@ const buildPrompt = (values: FormValues): string => {
     finalPrompt += `Explain your reasoning step-by-step but use natural language. \n`;
   }
   // Add followup if present
-  if (values.reasoning) {
+  if (values.followup) {
     finalPrompt += `At the end, suggest one related topic I could explore next. \n`;
   }
 
