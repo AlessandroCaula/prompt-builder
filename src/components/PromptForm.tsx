@@ -36,7 +36,8 @@ const PromptForm = () => {
     try {
       // Generate the prompt
       const generatedPrompt = buildPrompt(values);
-      await Clipboard.copy(generatedPrompt);
+      // await Clipboard.copy(generatedPrompt);
+      await Clipboard.copy(generatedPrompt.replace(/\n/g, "\n"));
       await showHUD("Copied to Clipboard");
     } catch (error) {
       await showHUD("Failed to Copy Prompt");
@@ -64,7 +65,7 @@ const PromptForm = () => {
       <Form.TextField
         id="role"
         title="Role"
-        placeholder="E.g. Data Scientist, UX Writer..."
+        placeholder="E.g. Data Scientist, Writer..."
         info="Who is the AI supposed to be?"
       />
 
@@ -87,26 +88,26 @@ const PromptForm = () => {
         info="Optional: Provide context the AI can use"
       />
 
-      <Form.Dropdown id="tone" title="Tone" defaultValue="None" info="Choose the writing tone.">
-        <Form.Dropdown.Item value="None" title="None" />
-        <Form.Dropdown.Item value="Neutral" title="Neutral" />
-        <Form.Dropdown.Item value="Formal" title="Formal" />
-        <Form.Dropdown.Item value="Friendly" title="Friendly" />
-        <Form.Dropdown.Item value="Persuasive" title="Persuasive" />
-        <Form.Dropdown.Item value="Academic" title="Academic" />
-      </Form.Dropdown>
-
       <Form.TextField
         id="format"
-        title="Format"
-        placeholder="E.g. JSON, bullets, ≤200 words..."
-        info="Optional: how should it answer?"
+        title="Format / Constraints"
+        placeholder="E.g. JSON, ≤200 words, Avoid jargon, keep it concise..."
+        info="Optional: How should it answer?"
       />
 
       <Form.Checkbox id="showAdvance" label="Show advanced options" onChange={(checked) => setShowAdvanced(checked)} />
 
       {showAdvanced && (
         <>
+          <Form.Dropdown id="tone" title="Tone" defaultValue="None" info="Choose the writing tone.">
+            <Form.Dropdown.Item value="None" title="None" />
+            <Form.Dropdown.Item value="Neutral" title="Neutral" />
+            <Form.Dropdown.Item value="Formal" title="Formal" />
+            <Form.Dropdown.Item value="Friendly" title="Friendly" />
+            <Form.Dropdown.Item value="Persuasive" title="Persuasive" />
+            <Form.Dropdown.Item value="Academic" title="Academic" />
+          </Form.Dropdown>
+
           <Form.TextField
             id="audience"
             title="Audience"
