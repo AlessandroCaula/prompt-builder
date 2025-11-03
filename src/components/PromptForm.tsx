@@ -148,30 +148,44 @@ const PromptForm = () => {
         onChange={(v) => handleChange("format", v)}
       />
 
+      <Form.TextField
+        id="audience"
+        title="Audience"
+        placeholder="E.g. Professors, Scientist, Young adults..."
+        info="Who is it for?"
+        value={formValues.audience}
+        onChange={(v) => handleChange("audience", v)}
+      />
+
+      <Form.Dropdown
+        id="tone"
+        title="Tone"
+        info="Choose the writing tone"
+        value={formValues.tone}
+        onChange={(v) => handleChange("tone", v)}
+      >
+        {tones.map((tone) => (
+          <Form.Dropdown.Item key={tone} value={tone} title={tone} />
+        ))}
+      </Form.Dropdown>
+
+      <Form.Dropdown
+        id="creativity"
+        title="Creativity Level"
+        info="Choose the creativity level"
+        value={formValues.creativity}
+        onChange={(v) => handleChange("creativity", v)}
+      >
+        {creativity.map((level) => (
+          <Form.Dropdown.Item key={level} value={level} title={level} />
+        ))}
+      </Form.Dropdown>
+
       <Form.Checkbox id="showAdvanced" label="Show advanced options" onChange={(checked) => setShowAdvanced(checked)} />
 
       {showAdvanced && (
         <>
-          <Form.Dropdown
-            id="tone"
-            title="Tone"
-            info="Choose the writing tone"
-            value={formValues.tone}
-            onChange={(v) => handleChange("tone", v)}
-          >
-            {tones.map((tone) => (
-              <Form.Dropdown.Item key={tone} value={tone} title={tone} />
-            ))}
-          </Form.Dropdown>
-
-          <Form.TextField
-            id="audience"
-            title="Audience"
-            placeholder="E.g. Professors, Developers..."
-            info="Who is it for?"
-            value={formValues.audience}
-            onChange={(v) => handleChange("audience", v)}
-          />
+          <Form.Separator />
 
           <Form.TextArea
             id="example"
@@ -182,18 +196,6 @@ const PromptForm = () => {
             onChange={(v) => handleChange("example", v)}
           />
 
-          <Form.Dropdown
-            id="creativity"
-            title="Creativity Level"
-            info="Choose the creativity level"
-            value={formValues.creativity}
-            onChange={(v) => handleChange("creativity", v)}
-          >
-            {creativity.map((level) => (
-              <Form.Dropdown.Item key={level} value={level} title={level} />
-            ))}
-          </Form.Dropdown>
-
           <Form.TextArea
             id="meta"
             title="Meta Instructions"
@@ -202,8 +204,6 @@ const PromptForm = () => {
             value={formValues.meta}
             onChange={(v) => handleChange("meta", v)}
           />
-
-          <Form.Separator />
 
           <Form.Checkbox
             id="reasoning"
