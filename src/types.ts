@@ -18,7 +18,7 @@ export const tones = [
 ] as const;
 type Tone = (typeof tones)[number];
 
-export const creativity = ["None", "Precise", "Balanced", "Creative"];
+export const creativity = ["None", "Low", "Medium", "High"];
 type Creativity = (typeof creativity)[number];
 
 export interface FormValues {

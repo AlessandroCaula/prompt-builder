@@ -51,8 +51,17 @@ const buildPrompt = (values: FormValues): string => {
 
   // Creativity
   if (values.creativity && values.creativity !== "None") {
-    const article = articleFor(values.creativity.trim());
-    finalPrompt += `Adopt ${article} ${values.creativity.toLowerCase().trim()} level of creativity.\n\n`;
+    switch (values.creativity) {
+      case "Low":
+        finalPrompt += `Keep creativity low.\n\n`;
+        break;
+      case "Medium":
+        finalPrompt += `Maintain a medium level of creativity.\n\n`;
+        break;
+      case "High":
+        finalPrompt += `Be highly creative.\n\n`;
+        break;
+    }
   }
 
   // Example
