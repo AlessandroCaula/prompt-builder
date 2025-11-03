@@ -117,6 +117,7 @@ const PromptForm = () => {
         error={titleError}
         onChange={(value) => {
           if (titleError && value.trim().length > 0) setTitleError(undefined);
+          handleChange("title", value);
         }}
       />
 
@@ -141,13 +142,6 @@ const PromptForm = () => {
           if (taskError && value.trim().length > 0) setTaskError(undefined);
           handleChange("task", value);
         }}
-      />
-
-      <Form.TextField
-        id="role"
-        title="Role"
-        placeholder="E.g. Data Scientist, UX Writer..."
-        info="Who is the AI supposed to be?"
       />
 
       <Form.TextArea
