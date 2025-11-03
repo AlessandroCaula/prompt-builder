@@ -164,23 +164,23 @@ const PromptForm = () => {
         ))}
       </Form.Dropdown>
 
-      <Form.Dropdown
-        id="creativity"
-        title="Creativity Level"
-        info="Choose the creativity level"
-        value={formValues.creativity}
-        onChange={(v) => handleChange("creativity", v)}
-      >
-        {creativity.map((level) => (
-          <Form.Dropdown.Item key={level} value={level} title={level} />
-        ))}
-      </Form.Dropdown>
-
       <Form.Checkbox id="showAdvanced" label="Show advanced options" onChange={(checked) => setShowAdvanced(checked)} />
 
       {showAdvanced && (
         <>
           <Form.Separator />
+
+          <Form.Dropdown
+            id="creativity"
+            title="Creativity Level"
+            info="Choose the creativity level"
+            value={formValues.creativity}
+            onChange={(v) => handleChange("creativity", v)}
+          >
+            {creativity.map((level) => (
+              <Form.Dropdown.Item key={level} value={level} title={level} />
+            ))}
+          </Form.Dropdown>
 
           <Form.TextArea
             id="example"

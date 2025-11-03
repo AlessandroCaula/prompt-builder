@@ -1,6 +1,6 @@
 # Prompt Builder
 
-**Prompt Builder** is a Raycast extension that helps you craft the perfect AI prompts efficiently. It makes easy to define roles, tasks, tone, audience, and constraints and more. Then preview and copy your prompts instantly.
+**Prompt Builder** is a Raycast extension that helps you craft the perfect AI prompts efficiently. It makes it easy to define roles, tasks, tone, audience, and constraints, helping make AI output more accurate and consistent. Then preview and copy your prompts instantly.
 
 ### Features
 
@@ -23,9 +23,9 @@
 2. Fill in the form fields:
     - **Role**: What persona or character the AI should adopt
     - **Task**: The goal or request for the AI
-    - **Tone**: Choose the writing tone
-    - **Audience**: Specify the target audience
     - **Format/ Constraints**: Guide the AI on output format or style
+    - **Audience**: Specify the target audience
+    - **Tone**: Choose the writing tone
 
 3. Toggle **Advanced Options** to add reasoning, examples, summaries, follow-ups, or meta instructions
 
@@ -57,4 +57,4 @@
 
 If you encounter any issues or have feature suggestions, open an issue on the GitHub repository.
 
-<!-- Prompt Builder helps you craft perfect AI prompts in seconds. Define roles, tasks, tone, audience, and constraints, preview your prompt, and copy it instantly — making AI output more accurate and consistent. -->
+<!-- Prompt Builder helps you craft perfect AI prompts in seconds. Define roles, tasks, tone, audience, and constraints, preview your prompt, and copy it instantly. Making AI output more accurate and consistent. -->
