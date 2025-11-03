@@ -173,6 +173,15 @@ const PromptForm = () => {
             onChange={(v) => handleChange("audience", v)}
           />
 
+          <Form.TextArea
+            id="example"
+            title="Example"
+            placeholder="E.g. Input → Output"
+            info="Show the style you want"
+            value={formValues.example}
+            onChange={(v) => handleChange("example", v)}
+          />
+
           <Form.Dropdown
             id="creativity"
             title="Creativity Level"
@@ -184,15 +193,6 @@ const PromptForm = () => {
               <Form.Dropdown.Item key={level} value={level} title={level} />
             ))}
           </Form.Dropdown>
-
-          <Form.TextArea
-            id="example"
-            title="Example"
-            placeholder="E.g. Input → Output"
-            info="Show the style you want"
-            value={formValues.example}
-            onChange={(v) => handleChange("example", v)}
-          />
 
           <Form.TextArea
             id="meta"
