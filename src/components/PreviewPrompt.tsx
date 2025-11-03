@@ -4,8 +4,7 @@ import PromptForm from "./PromptForm";
 
 const PreviewPrompt = ({ prompt }: PreviewPromptProps) => {
   const { push } = useNavigation();
-
-  // Generate the prompt
+  
   return (
     <Detail
       navigationTitle="Generated Prompt"

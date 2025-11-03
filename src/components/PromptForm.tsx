@@ -44,14 +44,12 @@ const PromptForm = () => {
   }, []);
 
   const validateAndGetPrompt = (values: FormValues): string | undefined => {
-    // Validate the form values
     const errors = validateForm(values);
     if (errors.task || errors.title) {
       if (errors.task) setTaskError(errors.task);
       if (errors.title) setTitleError(errors.title);
       return;
     }
-    // Generate the prompt
     const generatedPrompt = buildPrompt(values);
     return generatedPrompt;
   };
@@ -60,7 +58,6 @@ const PromptForm = () => {
     const prompt = validateAndGetPrompt(values);
     if (!prompt) return;
 
-    // Preview the prompt
     push(<PreviewPrompt prompt={prompt} />);
   };
 
@@ -69,9 +66,7 @@ const PromptForm = () => {
       const prompt = validateAndGetPrompt(values);
       if (!prompt) return;
 
-      // Copy to clipboard
       await Clipboard.copy(prompt);
-      // await Clipboard.copy(generatedPrompt.replace(/\n/g, "\n"));
       await showHUD("Copied to Clipboard");
     } catch (error) {
       await showHUD("Failed to Copy Prompt");
@@ -81,7 +76,7 @@ const PromptForm = () => {
 
   return (
     <Form
-      navigationTitle="Build your perfect prompt"
+      navigationTitle="Prompt Builder"
       actions={
         <ActionPanel>
           <Action.SubmitForm title="Copy to Clipboard" onSubmit={handleCopyToClipboard} />
@@ -108,7 +103,7 @@ const PromptForm = () => {
         </ActionPanel>
       }
     >
-      <Form.Description text="Build your perfect prompt" />
+      <Form.Description text="Build your prompt" />
 
       <Form.TextField
         id="title"
@@ -157,7 +152,7 @@ const PromptForm = () => {
         id="format"
         title="Format / Constraints"
         placeholder="E.g. JSON, ≤200 words, Avoid jargon, keep it concise..."
-        info="How should it answer?"
+        info="How should it answer? Separate multiple constraints with commas"
         value={formValues.format}
         onChange={(v) => handleChange("format", v)}
       />
@@ -183,23 +178,23 @@ const PromptForm = () => {
         ))}
       </Form.Dropdown>
 
-      <Form.Dropdown
-        id="creativity"
-        title="Creativity Level"
-        info="Choose the creativity level"
-        value={formValues.creativity}
-        onChange={(v) => handleChange("creativity", v)}
-      >
-        {creativity.map((level) => (
-          <Form.Dropdown.Item key={level} value={level} title={level} />
-        ))}
-      </Form.Dropdown>
-
       <Form.Checkbox id="showAdvanced" label="Show advanced options" onChange={(checked) => setShowAdvanced(checked)} />
 
       {showAdvanced && (
         <>
           <Form.Separator />
+
+          <Form.Dropdown
+            id="creativity"
+            title="Creativity Level"
+            info="Choose the creativity level"
+            value={formValues.creativity}
+            onChange={(v) => handleChange("creativity", v)}
+          >
+            {creativity.map((level) => (
+              <Form.Dropdown.Item key={level} value={level} title={level} />
+            ))}
+          </Form.Dropdown>
 
           <Form.TextArea
             id="example"
