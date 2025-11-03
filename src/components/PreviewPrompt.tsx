@@ -1,7 +1,10 @@
-import { Action, ActionPanel, Detail } from "@raycast/api";
+import { Action, ActionPanel, Detail, Icon, useNavigation } from "@raycast/api";
 import { PreviewPromptProps } from "../types";
+import PromptForm from "./PromptForm";
 
 const PreviewPrompt = ({ prompt }: PreviewPromptProps) => {
+  const { push } = useNavigation();
+
   // Generate the prompt
   return (
     <Detail
@@ -10,7 +13,7 @@ const PreviewPrompt = ({ prompt }: PreviewPromptProps) => {
       actions={
         <ActionPanel>
           <Action.CopyToClipboard title="Copy Prompt" content={prompt} />
-          {/* <Action.Push icon={Icon.Pencil} title="Edit Prompt" shortcut={{ modifiers: ["cmd"], key: "e" }} /> */}
+          <Action icon={Icon.Pencil} title="Edit Prompt" shortcut={{ modifiers: ["cmd"], key: "e" }} onAction={() => push(<PromptForm />)} />
         </ActionPanel>
       }
     />
