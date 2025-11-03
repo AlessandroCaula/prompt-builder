@@ -1,18 +1,12 @@
-// type Tone = "None" | "Neutral" | "Formal" | "Friendly" | "Conversational" | "Persuasive" | "Academic" | "Technical";
-
 export const tones = [
   "None",
-  // Casual
   "Friendly",
   "Conversational",
-  // Balanced
   "Neutral",
-  // Professional
   "Formal",
   "Professional",
   "Technical",
   "Academic",
-  // Special
   "Persuasive",
   "Empathetic",
 ] as const;

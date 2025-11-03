@@ -42,13 +42,11 @@ const PromptForm = () => {
   }, []);
 
   const validateAndGetPrompt = (values: FormValues): string | undefined => {
-    // Validate the form values
     const errors = validateForm(values);
     if (errors.task) {
       setTaskError(errors.task);
       return;
     }
-    // Generate the prompt
     const generatedPrompt = buildPrompt(values);
     return generatedPrompt;
   };
@@ -57,7 +55,6 @@ const PromptForm = () => {
     const prompt = validateAndGetPrompt(values);
     if (!prompt) return;
 
-    // Preview the prompt
     push(<PreviewPrompt prompt={prompt} />);
   };
 
@@ -66,9 +63,7 @@ const PromptForm = () => {
       const prompt = validateAndGetPrompt(values);
       if (!prompt) return;
 
-      // Copy to clipboard
       await Clipboard.copy(prompt);
-      // await Clipboard.copy(generatedPrompt.replace(/\n/g, "\n"));
       await showHUD("Copied to Clipboard");
     } catch (error) {
       await showHUD("Failed to Copy Prompt");
