@@ -73,7 +73,7 @@ const PromptForm = () => {
 
   return (
     <Form
-      navigationTitle="Build your perfect prompt"
+      navigationTitle="Prompt Builder"
       actions={
         <ActionPanel>
           <Action.SubmitForm title="Copy to Clipboard" onSubmit={handleCopyToClipboard} />
@@ -100,7 +100,7 @@ const PromptForm = () => {
         </ActionPanel>
       }
     >
-      <Form.Description text="Build your perfect prompt" />
+      <Form.Description text="Build your prompt" />
 
       <Form.TextField
         id="role"
@@ -138,7 +138,7 @@ const PromptForm = () => {
         id="format"
         title="Format / Constraints"
         placeholder="E.g. JSON, ≤200 words, Avoid jargon, keep it concise..."
-        info="How should it answer?"
+        info="How should it answer? Separate multiple constraints with commas"
         value={formValues.format}
         onChange={(v) => handleChange("format", v)}
       />
