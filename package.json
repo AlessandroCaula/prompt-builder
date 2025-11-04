@@ -3,7 +3,7 @@
   "name": "prompt-builder",
   "title": "Prompt Builder",
   "description": "Prompt Builder helps you craft clear, consistent AI prompts through a simple form. Define roles, tone, audience, and constraints to get precise results every time. Build better prompts faster and copy them instantly into your favorite AI tools.",
-  "icon": "extension-icon.png",
+  "icon": "prompt-builder-icon.png",
   "author": "alessandrocaula",
   "platforms": [
     "macOS",
