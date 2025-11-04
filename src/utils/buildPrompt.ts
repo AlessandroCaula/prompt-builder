@@ -35,7 +35,7 @@ const buildPrompt = (values: FormValues): string => {
   if (values.format) {
     finalPrompt += `Follow these constraints:\n${values.format
       .split(",")
-      .map((v) => `- ${v.trim()}`)
+      .map((v) => `- ${v.trim().charAt(0).toUpperCase() + v.trim().slice(1)}`)
       .join("\n")}\n\n`;
   }
 
