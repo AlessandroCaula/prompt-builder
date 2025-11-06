@@ -30,9 +30,6 @@ const PromptForm = () => {
 
   useEffect(() => {
     const hasAdvancedValues =
-      formValues.tone !== "None" ||
-      formValues.audience ||
-      formValues.creativity !== "None" ||
       formValues.example ||
       formValues.meta ||
       formValues.reasoning ||
@@ -103,7 +100,7 @@ const PromptForm = () => {
         </ActionPanel>
       }
     >
-      <Form.Description text="Build your prompt" />
+      <Form.Description text="Build your prompt (Preview with ⌘Y)" />
 
       <Form.TextField
         id="title"
@@ -178,23 +175,28 @@ const PromptForm = () => {
         ))}
       </Form.Dropdown>
 
-      <Form.Checkbox id="showAdvanced" label="Show advanced options" onChange={(checked) => setShowAdvanced(checked)} />
+      <Form.Dropdown
+        id="creativity"
+        title="Creativity Level"
+        info="Choose the creativity level"
+        value={formValues.creativity}
+        onChange={(v) => handleChange("creativity", v)}
+      >
+        {creativity.map((level) => (
+          <Form.Dropdown.Item key={level} value={level} title={level} />
+        ))}
+      </Form.Dropdown>
+
+      <Form.Checkbox
+        id="showAdvanced"
+        label="Show advanced options"
+        value={showAdvanced}
+        onChange={(checked) => setShowAdvanced(checked)}
+      />
 
       {showAdvanced && (
         <>
           <Form.Separator />
-
-          <Form.Dropdown
-            id="creativity"
-            title="Creativity Level"
-            info="Choose the creativity level"
-            value={formValues.creativity}
-            onChange={(v) => handleChange("creativity", v)}
-          >
-            {creativity.map((level) => (
-              <Form.Dropdown.Item key={level} value={level} title={level} />
-            ))}
-          </Form.Dropdown>
 
           <Form.TextArea
             id="example"

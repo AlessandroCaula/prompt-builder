@@ -4,7 +4,7 @@ import PromptForm from "./PromptForm";
 
 const PreviewPrompt = ({ prompt }: PreviewPromptProps) => {
   const { push } = useNavigation();
-  
+
   return (
     <Detail
       navigationTitle="Generated Prompt"
@@ -12,7 +12,12 @@ const PreviewPrompt = ({ prompt }: PreviewPromptProps) => {
       actions={
         <ActionPanel>
           <Action.CopyToClipboard title="Copy Prompt" content={prompt} />
-          <Action icon={Icon.Pencil} title="Edit Prompt" shortcut={{ modifiers: ["cmd"], key: "e" }} onAction={() => push(<PromptForm />)} />
+          <Action
+            icon={Icon.Pencil}
+            title="Edit Prompt"
+            shortcut={{ modifiers: ["cmd"], key: "e" }}
+            onAction={() => push(<PromptForm />)}
+          />
         </ActionPanel>
       }
     />
