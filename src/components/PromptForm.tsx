@@ -5,12 +5,13 @@ import { creativity, FormValues, tones } from "../types";
 import PreviewPrompt from "./PreviewPrompt";
 import { validateForm } from "../utils/validation";
 import { usePersistentForm } from "../hooks/usePersistentForm";
+import { title } from "process";
 
 const PromptForm = () => {
   const { push } = useNavigation();
   const [taskError, setTaskError] = useState<string | undefined>();
   const [showAdvanced, setShowAdvanced] = useState<boolean>(false);
-  const { formValues, handleChange, resetForm } = usePersistentForm({
+  const { formValues, handleChange, resetForm, setFormValues } = usePersistentForm({
     role: "",
     task: "",
     reference: "",
@@ -25,6 +26,50 @@ const PromptForm = () => {
     summary: false,
     followup: false,
   });
+
+  type Template = { id: string; title: string };
+
+  const [templates, setTemplates] = useState<Template[]>([
+    { id: "0", title: "None" },
+    { id: "1234", title: "Professor" },
+  ]);
+  const [selectedTemplateId, setSelectedTemplateId] = useState<string>(templates[0].id);
+  const [storedTemplates, setStoredTemplates] = useState<FormValues[]>([
+    {
+      id: "0",
+      role: "",
+      task: "",
+      reference: "",
+      format: "",
+      tone: "None",
+      audience: "",
+      creativity: "None",
+      example: "",
+      meta: "",
+      reasoning: false,
+      sources: false,
+      summary: false,
+      followup: false,
+    },
+    {
+      id: "1234",
+      role: "Teacher",
+      task: "",
+      reference: "Students",
+      format: "",
+      tone: "None",
+      audience: "",
+      creativity: "None",
+      example: "",
+      meta: "",
+      reasoning: false,
+      sources: false,
+      summary: true,
+      followup: false,
+    },
+  ]);
+
+  // const [selectedTemplate, setSelectedTemplate] = useState<FormValues>();
 
   useEffect(() => {
     const hasAdvancedValues =
@@ -68,6 +113,15 @@ const PromptForm = () => {
     }
   };
 
+  const loadTemplate = (templateId: string) => {
+    const loadedTemplate = storedTemplates.find((t) => t.id === templateId);
+    if (loadedTemplate) {
+      setSelectedTemplateId(templateId);
+      // setSelectedTemplate(loadedTemplate);
+      setFormValues(loadedTemplate);
+    }
+  };
+
   return (
     <Form
       navigationTitle="Prompt Builder"
@@ -98,6 +152,17 @@ const PromptForm = () => {
       }
     >
       <Form.Description text="Build your prompt (Preview with ⌘Y)" />
+
+      <Form.Dropdown
+        id="template"
+        title="Load Template"
+        value={selectedTemplateId}
+        onChange={(temp) => loadTemplate(temp)}
+      >
+        {templates.map((temp) => (
+          <Form.Dropdown.Item key={temp.id} value={temp.id} title={temp.title} />
+        ))}
+      </Form.Dropdown>
 
       <Form.TextField
         id="role"
