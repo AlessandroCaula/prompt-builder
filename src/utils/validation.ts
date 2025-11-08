@@ -9,3 +9,7 @@ export const validateForm = (values: FormValues) => {
 
   return errors;
 };
+
+// export const validateTemplateTitle = (title: string) => {
+  
+// }

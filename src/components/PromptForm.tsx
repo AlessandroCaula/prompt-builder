@@ -5,71 +5,74 @@ import { creativity, FormValues, tones } from "../types";
 import PreviewPrompt from "./PreviewPrompt";
 import { validateForm } from "../utils/validation";
 import { usePersistentForm } from "../hooks/usePersistentForm";
-import { title } from "process";
+import SaveTemplateForm from "./SaveTemplateForm";
+import { useTemplates } from "../hooks/useTemplates";
 
 const PromptForm = () => {
   const { push } = useNavigation();
   const [taskError, setTaskError] = useState<string | undefined>();
   const [showAdvanced, setShowAdvanced] = useState<boolean>(false);
-  const { formValues, handleChange, resetForm, setFormValues } = usePersistentForm({
-    role: "",
-    task: "",
-    reference: "",
-    format: "",
-    tone: "None",
-    audience: "",
-    creativity: "None",
-    example: "",
-    meta: "",
-    reasoning: false,
-    sources: false,
-    summary: false,
-    followup: false,
-  });
+  const { formValues, handleChange, resetForm, setFormValues } = usePersistentForm();
+  //   {
+  //   role: "",
+  //   task: "",
+  //   reference: "",
+  //   format: "",
+  //   tone: "None",
+  //   audience: "",
+  //   creativity: "None",
+  //   example: "",
+  //   meta: "",
+  //   reasoning: false,
+  //   sources: false,
+  //   summary: false,
+  //   followup: false,
+  // }
 
-  type Template = { id: string; title: string };
-
-  const [templates, setTemplates] = useState<Template[]>([
-    { id: "0", title: "None" },
-    { id: "1234", title: "Professor" },
-  ]);
+  const { templates, storedTemplates } = useTemplates();
   const [selectedTemplateId, setSelectedTemplateId] = useState<string>(templates[0].id);
-  const [storedTemplates, setStoredTemplates] = useState<FormValues[]>([
-    {
-      id: "0",
-      role: "",
-      task: "",
-      reference: "",
-      format: "",
-      tone: "None",
-      audience: "",
-      creativity: "None",
-      example: "",
-      meta: "",
-      reasoning: false,
-      sources: false,
-      summary: false,
-      followup: false,
-    },
-    {
-      id: "1234",
-      role: "Teacher",
-      task: "",
-      reference: "Students",
-      format: "",
-      tone: "None",
-      audience: "",
-      creativity: "None",
-      example: "",
-      meta: "",
-      reasoning: false,
-      sources: false,
-      summary: true,
-      followup: false,
-    },
-  ]);
 
-  // const [selectedTemplate, setSelectedTemplate] = useState<FormValues>();
+  // type Template = { id: string; title: string };
+
+  // const [templates, setTemplates] = useState<Template[]>([
+  //   { id: "0", title: "None" },
+  //   { id: "1234", title: "Professor" },
+  // ]);
+  // const [selectedTemplateId, setSelectedTemplateId] = useState<string>(templates[0].id);
+  // const [storedTemplates, setStoredTemplates] = useState<FormValues[]>([
+  //   {
+  //     id: "0",
+  //     role: "",
+  //     task: "",
+  //     reference: "",
+  //     format: "",
+  //     tone: "None",
+  //     audience: "",
+  //     creativity: "None",
+  //     example: "",
+  //     meta: "",
+  //     reasoning: false,
+  //     sources: false,
+  //     summary: false,
+  //     followup: false,
+  //   },
+  //   {
+  //     id: "1234",
+  //     role: "Teacher",
+  //     task: "",
+  //     reference: "Students",
+  //     format: "",
+  //     tone: "None",
+  //     audience: "",
+  //     creativity: "None",
+  //     example: "",
+  //     meta: "",
+  //     reasoning: false,
+  //     sources: false,
+  //     summary: true,
+  //     followup: false,
+  //   },
+  // ]);
 
   useEffect(() => {
     const hasAdvancedValues =
@@ -114,10 +117,12 @@ const PromptForm = () => {
   };
 
   const loadTemplate = (templateId: string) => {
+    console.log(storedTemplates);
     const loadedTemplate = storedTemplates.find((t) => t.id === templateId);
+    console.log(loadedTemplate);
+    console.log(templates);
     if (loadedTemplate) {
       setSelectedTemplateId(templateId);
-      // setSelectedTemplate(loadedTemplate);
       setFormValues(loadedTemplate);
     }
   };
@@ -133,6 +138,12 @@ const PromptForm = () => {
             icon={Icon.Eye}
             onSubmit={handlePreviewPrompt}
             shortcut={{ modifiers: ["cmd"], key: "y" }}
+          />
+          <Action.Push
+            title="Save as Template"
+            icon={Icon.SaveDocument}
+            shortcut={{ modifiers: ["cmd"], key: "s" }}
+            target={<SaveTemplateForm />}
           />
           <Action
             title="Clear All"
@@ -157,7 +168,10 @@ const PromptForm = () => {
         id="template"
         title="Load Template"
         value={selectedTemplateId}
-        onChange={(temp) => loadTemplate(temp)}
+        onChange={(temp) => {
+          loadTemplate(temp);
+          setSelectedTemplateId(temp);
+        }}
       >
         {templates.map((temp) => (
           <Form.Dropdown.Item key={temp.id} value={temp.id} title={temp.title} />

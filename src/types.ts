@@ -16,7 +16,6 @@ export const creativity = ["None", "Low", "Medium", "High"];
 type Creativity = (typeof creativity)[number];
 
 export interface FormValues {
-  id?: string;
   role?: string;
   task: string;
   reference?: string;
