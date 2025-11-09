@@ -77,5 +77,20 @@ export const useTemplates = () => {
     await LocalStorage.setItem(TEMPLATE_VALUES_KEY, JSON.stringify(updatedStoredTemplates));
   };
 
-  return { templates, storedTemplates, addTemplate, removeTemplate };
+  const updateTemplate = async (id: string, title: string, values: FormValues) => {
+    if (!templates.find((t) => t.id === id)) {
+      throw new Error(`Template with id ${id} not found`);
+    }
+    
+    const updatedTemplates = templates.map((t) => (t.id === id ? { ...t, title } : t));
+    const updatedStoredTemplates = storedTemplates.map((t) => (t.id === id ? { ...t, ...values } : t));
+
+    setTemplates(updatedTemplates);
+    setStoredTemplates(updatedStoredTemplates);
+
+    await LocalStorage.setItem(TEMPLATE_LIST_KEY, JSON.stringify(updatedTemplates));
+    await LocalStorage.setItem(TEMPLATE_VALUES_KEY, JSON.stringify(updatedStoredTemplates));
+  };
+
+  return { templates, storedTemplates, addTemplate, updateTemplate, removeTemplate };
 };

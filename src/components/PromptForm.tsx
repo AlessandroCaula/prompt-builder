@@ -13,7 +13,7 @@ const PromptForm = () => {
   const [taskError, setTaskError] = useState<string | undefined>();
   const [showAdvanced, setShowAdvanced] = useState<boolean>(false);
   const { formValues, handleChange, resetForm, setFormValues } = usePersistentForm();
-  const { addTemplate, templates, storedTemplates } = useTemplates();
+  const { templates, storedTemplates, addTemplate, updateTemplate } = useTemplates();
   const [selectedTemplateId, setSelectedTemplateId] = useState<string>(templates[0].id);
 
   useEffect(() => {
@@ -78,18 +78,38 @@ const PromptForm = () => {
             onSubmit={handlePreviewPrompt}
             shortcut={{ modifiers: ["cmd"], key: "y" }}
           />
-          <Action.Push
-            title="Save as Template"
-            icon={Icon.SaveDocument}
-            shortcut={{ modifiers: ["cmd"], key: "s" }}
-            target={
-              <SaveTemplateForm
-                addTemplate={addTemplate}
-                setSelectedTemplateId={setSelectedTemplateId}
-                formValues={formValues}
-              />
-            }
-          />
+          {selectedTemplateId === "none" ? (
+            <Action.Push
+              title="Save as Template"
+              icon={Icon.SaveDocument}
+              shortcut={{ modifiers: ["cmd"], key: "s" }}
+              target={
+                <SaveTemplateForm
+                  addTemplate={addTemplate}
+                  setSelectedTemplateId={setSelectedTemplateId}
+                  formValues={formValues}
+                  isUpdate={false}
+                />
+              }
+            />
+          ) : (
+            <Action.Push
+              title="Update Template"
+              icon={Icon.Repeat}
+              shortcut={{ modifiers: ["cmd"], key: "u" }}
+              target={
+                <SaveTemplateForm
+                  addTemplate={addTemplate}
+                  updateTemplate={updateTemplate}
+                  selectedTemplateId={selectedTemplateId}
+                  setSelectedTemplateId={setSelectedTemplateId}
+                  formValues={formValues}
+                  isUpdate={true}
+                  initialTitle={templates.find(t => t.id === selectedTemplateId)?.title ?? ""}
+                />
+              }
+            />
+          )}
 
           <Action
             title="Clear All"
@@ -108,7 +128,6 @@ const PromptForm = () => {
         </ActionPanel>
       }
     >
-      <Form.Description text="Build your prompt (Preview with ⌘Y)" />
 
       <Form.Dropdown
         id="template"
@@ -123,6 +142,8 @@ const PromptForm = () => {
           <Form.Dropdown.Item key={temp.id} value={temp.id} title={temp.title} />
         ))}
       </Form.Dropdown>
+
+      <Form.Description text="Build your prompt (Preview with ⌘Y)" />
 
       <Form.TextField
         id="role"
