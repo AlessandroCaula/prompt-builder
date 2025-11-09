@@ -33,7 +33,7 @@ export const useTemplates = () => {
       sources: false,
       summary: false,
       followup: false,
-    }
+    },
   ]);
 
   useEffect(() => {
@@ -48,7 +48,7 @@ export const useTemplates = () => {
     loadTemplates();
   }, []);
 
-  const addTemplate = async (title: string, values: FormValues) => {
+  const addTemplate = async (title: string, values: FormValues): Promise<string> => {
     const id = randomUUID();
 
     const newTemplate: Template = { id, title };
@@ -62,6 +62,8 @@ export const useTemplates = () => {
 
     await LocalStorage.setItem(TEMPLATE_LIST_KEY, JSON.stringify(updatedTemplates));
     await LocalStorage.setItem(TEMPLATE_VALUES_KEY, JSON.stringify(updatedStoredTemplates));
+
+    return id;
   };
 
   const removeTemplate = async (id: string) => {

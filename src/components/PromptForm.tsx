@@ -13,66 +13,8 @@ const PromptForm = () => {
   const [taskError, setTaskError] = useState<string | undefined>();
   const [showAdvanced, setShowAdvanced] = useState<boolean>(false);
   const { formValues, handleChange, resetForm, setFormValues } = usePersistentForm();
-  //   {
-  //   role: "",
-  //   task: "",
-  //   reference: "",
-  //   format: "",
-  //   tone: "None",
-  //   audience: "",
-  //   creativity: "None",
-  //   example: "",
-  //   meta: "",
-  //   reasoning: false,
-  //   sources: false,
-  //   summary: false,
-  //   followup: false,
-  // }
-
-  const { templates, storedTemplates } = useTemplates();
+  const { addTemplate, templates, storedTemplates } = useTemplates();
   const [selectedTemplateId, setSelectedTemplateId] = useState<string>(templates[0].id);
-
-  // type Template = { id: string; title: string };
-
-  // const [templates, setTemplates] = useState<Template[]>([
-  //   { id: "0", title: "None" },
-  //   { id: "1234", title: "Professor" },
-  // ]);
-  // const [selectedTemplateId, setSelectedTemplateId] = useState<string>(templates[0].id);
-  // const [storedTemplates, setStoredTemplates] = useState<FormValues[]>([
-  //   {
-  //     id: "0",
-  //     role: "",
-  //     task: "",
-  //     reference: "",
-  //     format: "",
-  //     tone: "None",
-  //     audience: "",
-  //     creativity: "None",
-  //     example: "",
-  //     meta: "",
-  //     reasoning: false,
-  //     sources: false,
-  //     summary: false,
-  //     followup: false,
-  //   },
-  //   {
-  //     id: "1234",
-  //     role: "Teacher",
-  //     task: "",
-  //     reference: "Students",
-  //     format: "",
-  //     tone: "None",
-  //     audience: "",
-  //     creativity: "None",
-  //     example: "",
-  //     meta: "",
-  //     reasoning: false,
-  //     sources: false,
-  //     summary: true,
-  //     followup: false,
-  //   },
-  // ]);
 
   useEffect(() => {
     const hasAdvancedValues =
@@ -117,10 +59,7 @@ const PromptForm = () => {
   };
 
   const loadTemplate = (templateId: string) => {
-    console.log(storedTemplates);
     const loadedTemplate = storedTemplates.find((t) => t.id === templateId);
-    console.log(loadedTemplate);
-    console.log(templates);
     if (loadedTemplate) {
       setSelectedTemplateId(templateId);
       setFormValues(loadedTemplate);
@@ -143,8 +82,15 @@ const PromptForm = () => {
             title="Save as Template"
             icon={Icon.SaveDocument}
             shortcut={{ modifiers: ["cmd"], key: "s" }}
-            target={<SaveTemplateForm />}
+            target={
+              <SaveTemplateForm
+                addTemplate={addTemplate}
+                setSelectedTemplateId={setSelectedTemplateId}
+                formValues={formValues}
+              />
+            }
           />
+
           <Action
             title="Clear All"
             icon={Icon.Trash}

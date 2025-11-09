@@ -1,32 +1,36 @@
-import { Action, ActionPanel, Form, showToast, Toast } from "@raycast/api";
-import { useTemplates } from "../hooks/useTemplates";
-import { usePersistentForm } from "../hooks/usePersistentForm";
+import { Action, ActionPanel, Form, showToast, Toast, useNavigation } from "@raycast/api";
+import { FormValues } from "../types";
 
 export interface TemplateForm {
   title: string;
 }
 
-const SaveTemplateForm = () => {
+export interface SaveTemplateFormProps {
+  addTemplate: (title: string, values: FormValues) => Promise<string>;
+  setSelectedTemplateId: React.Dispatch<React.SetStateAction<string>>;
+  formValues: FormValues;
+}
 
-  const { addTemplate } = useTemplates();
-  const { formValues } = usePersistentForm();
+const SaveTemplateForm = ({ addTemplate, setSelectedTemplateId, formValues }: SaveTemplateFormProps) => {
+  const { pop } = useNavigation();
 
   const handleSaveTemplate = async (values: TemplateForm) => {
-    console.log(values.title);
     try {
-      console.log(values.title, formValues);
-      addTemplate(values.title, formValues);
+      const id = await addTemplate(values.title, formValues);
+      setSelectedTemplateId(id);
+
       await showToast({
         style: Toast.Style.Success,
         title: "Template saved",
-      })
+      });
 
+      pop();
     } catch (error) {
       await showToast({
         style: Toast.Style.Failure,
         title: "Failed to save template",
         message: String(error),
-      })
+      });
     }
   };
 
@@ -35,16 +39,14 @@ const SaveTemplateForm = () => {
       navigationTitle="Save Template"
       actions={
         <ActionPanel>
-          <Action.SubmitForm 
-            title="Save Template" 
-            onSubmit={handleSaveTemplate}
-          />
+          <Action.SubmitForm title="Save Template" onSubmit={handleSaveTemplate} />
         </ActionPanel>
       }
     >
       <Form.Description text="Save as Template" />
 
       <Form.TextField id="title" title="Template Title" />
+
     </Form>
   );
 };
