@@ -51,8 +51,14 @@ export const useTemplates = () => {
   const addTemplate = async (title: string, values: FormValues): Promise<string> => {
     const id = randomUUID();
 
+    console.log("Adding Template");
+    console.log(id);
+
     const newTemplate: Template = { id, title };
-    const newStoredTemplate: StoredTemplate = { id, ...values };
+    const newStoredTemplate: StoredTemplate = { ...values, id };
+
+    console.log(newTemplate);
+    console.log(newStoredTemplate);
 
     const updatedTemplates = [...templates, newTemplate];
     const updatedStoredTemplates = [...storedTemplates, newStoredTemplate];
@@ -81,7 +87,7 @@ export const useTemplates = () => {
     if (!templates.find((t) => t.id === id)) {
       throw new Error(`Template with id ${id} not found`);
     }
-    
+
     const updatedTemplates = templates.map((t) => (t.id === id ? { ...t, title } : t));
     const updatedStoredTemplates = storedTemplates.map((t) => (t.id === id ? { ...t, ...values } : t));
 

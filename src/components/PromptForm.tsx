@@ -1,4 +1,16 @@
-import { Action, ActionPanel, Clipboard, Form, Icon, showHUD, showToast, Toast, useNavigation } from "@raycast/api";
+import {
+  Action,
+  ActionPanel,
+  Alert,
+  Clipboard,
+  confirmAlert,
+  Form,
+  Icon,
+  showHUD,
+  showToast,
+  Toast,
+  useNavigation,
+} from "@raycast/api";
 import { useEffect, useState } from "react";
 import buildPrompt from "../utils/buildPrompt";
 import { creativity, FormValues, tones } from "../types";
@@ -13,7 +25,7 @@ const PromptForm = () => {
   const [taskError, setTaskError] = useState<string | undefined>();
   const [showAdvanced, setShowAdvanced] = useState<boolean>(false);
   const { formValues, handleChange, resetForm, setFormValues } = usePersistentForm();
-  const { templates, storedTemplates, addTemplate, updateTemplate } = useTemplates();
+  const { templates, storedTemplates, addTemplate, updateTemplate, removeTemplate } = useTemplates();
   const [selectedTemplateId, setSelectedTemplateId] = useState<string>(templates[0].id);
 
   useEffect(() => {
@@ -60,9 +72,36 @@ const PromptForm = () => {
 
   const loadTemplate = (templateId: string) => {
     const loadedTemplate = storedTemplates.find((t) => t.id === templateId);
+    // console.log(loadedTemplate);
     if (loadedTemplate) {
       setSelectedTemplateId(templateId);
       setFormValues(loadedTemplate);
+    }
+  };
+
+  const handleTemplateDeletion = async () => {
+    const confirmed = await confirmAlert({
+      title: "Delete Template",
+      message: "Are you sure you want to delete this template?",
+      primaryAction: { title: "Delete", style: Alert.ActionStyle.Destructive },
+    });
+
+    if (!confirmed) return;
+
+    try {
+      setSelectedTemplateId("none");
+      await removeTemplate(selectedTemplateId);
+      resetForm();
+      await showToast({
+        style: Toast.Style.Success,
+        title: "Template deleted",
+      });
+    } catch (error) {
+      await showToast({
+        style: Toast.Style.Failure,
+        title: "Failed to delete template",
+        message: String(error),
+      });
     }
   };
 
@@ -93,22 +132,31 @@ const PromptForm = () => {
               }
             />
           ) : (
-            <Action.Push
-              title="Update Template"
-              icon={Icon.Repeat}
-              shortcut={{ modifiers: ["cmd"], key: "u" }}
-              target={
-                <SaveTemplateForm
-                  addTemplate={addTemplate}
-                  updateTemplate={updateTemplate}
-                  selectedTemplateId={selectedTemplateId}
-                  setSelectedTemplateId={setSelectedTemplateId}
-                  formValues={formValues}
-                  isUpdate={true}
-                  initialTitle={templates.find(t => t.id === selectedTemplateId)?.title ?? ""}
-                />
-              }
-            />
+            <>
+              <Action.Push
+                title="Update Template"
+                icon={Icon.Repeat}
+                shortcut={{ modifiers: ["cmd"], key: "u" }}
+                target={
+                  <SaveTemplateForm
+                    addTemplate={addTemplate}
+                    updateTemplate={updateTemplate}
+                    selectedTemplateId={selectedTemplateId}
+                    setSelectedTemplateId={setSelectedTemplateId}
+                    formValues={formValues}
+                    isUpdate={true}
+                    initialTitle={templates.find((t) => t.id === selectedTemplateId)?.title ?? ""}
+                  />
+                }
+              />
+              <Action
+                title="Delete Template"
+                icon={Icon.Trash}
+                style={Action.Style.Destructive}
+                shortcut={{ modifiers: ["cmd", "shift"], key: "d" }}
+                onAction={handleTemplateDeletion}
+              />
+            </>
           )}
 
           <Action
@@ -128,7 +176,6 @@ const PromptForm = () => {
         </ActionPanel>
       }
     >
-
       <Form.Dropdown
         id="template"
         title="Load Template"

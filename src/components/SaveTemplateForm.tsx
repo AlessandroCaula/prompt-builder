@@ -1,6 +1,7 @@
 import { Action, ActionPanel, Form, showToast, Toast, useNavigation } from "@raycast/api";
 import { FormValues } from "../types";
 import { useState } from "react";
+import { useTemplates } from "../hooks/useTemplates";
 
 export interface TemplateForm {
   title: string;
@@ -27,9 +28,16 @@ const SaveTemplateForm = ({
 }: SaveTemplateFormProps) => {
   const { pop } = useNavigation();
   const [title, setTitle] = useState(initialTitle || "");
+  const { templates } = useTemplates();
+  const [titleError, setTitleError] = useState<string | undefined>();
 
   const handleSave = async (values: TemplateForm) => {
     try {
+      if (templates.find((t) => t.title === values.title)) {
+        setTitleError("Template title already present");
+        return;
+      }
+
       const id = await addTemplate(values.title, formValues);
       setSelectedTemplateId(id);
 
@@ -81,9 +89,18 @@ const SaveTemplateForm = ({
         </ActionPanel>
       }
     >
-      <Form.Description text="Save as Template" />
+      <Form.Description text={isUpdate ? "Update template" : "Save as Template"} />
 
-      <Form.TextField id="title" title="Template Title" value={title} onChange={setTitle} />
+      <Form.TextField
+        id="title"
+        title="Template Title"
+        value={title}
+        onChange={(v) => {
+          setTitle(v);
+          if (titleError && titleError.length > 0) setTitleError(undefined);
+        }}
+        error={titleError}
+      />
     </Form>
   );
 };
