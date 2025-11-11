@@ -117,21 +117,22 @@ const PromptForm = () => {
             onSubmit={handlePreviewPrompt}
             shortcut={{ modifiers: ["cmd"], key: "y" }}
           />
-          {selectedTemplateId === "none" ? (
-            <Action.Push
-              title="Save as Template"
-              icon={Icon.SaveDocument}
-              shortcut={{ modifiers: ["cmd"], key: "s" }}
-              target={
-                <SaveTemplateForm
-                  addTemplate={addTemplate}
-                  setSelectedTemplateId={setSelectedTemplateId}
-                  formValues={formValues}
-                  isUpdate={false}
-                />
-              }
-            />
-          ) : (
+          <Action.Push
+            title="Save as Template"
+            icon={Icon.SaveDocument}
+            shortcut={{ modifiers: ["cmd"], key: "s" }}
+            target={
+              <SaveTemplateForm
+                addTemplate={addTemplate}
+                setSelectedTemplateId={setSelectedTemplateId}
+                formValues={formValues}
+                isUpdate={false}
+                initialTitle={templates.find((t) => t.id === selectedTemplateId && t.id !== "none")?.title ?? ""}
+              />
+            }
+          />
+
+          {selectedTemplateId !== "none" && (
             <>
               <Action.Push
                 title="Update Template"
@@ -155,6 +156,15 @@ const PromptForm = () => {
                 style={Action.Style.Destructive}
                 shortcut={{ modifiers: ["cmd", "shift"], key: "d" }}
                 onAction={handleTemplateDeletion}
+              />
+              <Action
+                title="New Empty Template"
+                icon={Icon.BlankDocument}
+                shortcut={{ modifiers: ["cmd"], key: "n" }}
+                onAction={() => {
+                  setSelectedTemplateId("none");
+                  resetForm();
+                }}
               />
             </>
           )}

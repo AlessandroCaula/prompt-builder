@@ -34,3 +34,12 @@ export interface FormValues {
 export interface PreviewPromptProps {
   prompt: string;
 }
+
+export interface Template {
+  id: string;
+  title: string;
+}
+
+export interface StoredTemplate extends FormValues {
+  id: string;
+}

@@ -1,16 +1,7 @@
 import { useEffect, useState } from "react";
-import { FormValues } from "../types";
+import { FormValues, StoredTemplate, Template } from "../types";
 import { randomUUID } from "crypto";
 import { LocalStorage } from "@raycast/api";
-
-export interface Template {
-  id: string;
-  title: string;
-}
-
-export interface StoredTemplate extends FormValues {
-  id: string;
-}
 
 const TEMPLATE_LIST_KEY = "promptTemplateList";
 const TEMPLATE_VALUES_KEY = "promptTemplateValues";
@@ -51,14 +42,8 @@ export const useTemplates = () => {
   const addTemplate = async (title: string, values: FormValues): Promise<string> => {
     const id = randomUUID();
 
-    console.log("Adding Template");
-    console.log(id);
-
     const newTemplate: Template = { id, title };
     const newStoredTemplate: StoredTemplate = { ...values, id };
-
-    console.log(newTemplate);
-    console.log(newStoredTemplate);
 
     const updatedTemplates = [...templates, newTemplate];
     const updatedStoredTemplates = [...storedTemplates, newStoredTemplate];

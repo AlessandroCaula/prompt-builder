@@ -1,4 +1,4 @@
-import { FormValues } from "../types";
+import { FormValues, Template } from "../types";
 
 export const validateForm = (values: FormValues) => {
   const errors: { task?: string } = {};
@@ -10,6 +10,15 @@ export const validateForm = (values: FormValues) => {
   return errors;
 };
 
-// export const validateTemplateTitle = (title: string) => {
-  
-// }
+export const validateTemplateTitle = (title: string, templates: Template[], selectedTemplateId?: string) => {
+  const errors: { title?: string } = {};
+  const trimmedTitle = title.trim();
+
+  if (templates.find((t) => t.title === trimmedTitle && t.id !== selectedTemplateId)) {
+    errors.title = "Template title already present";
+  } else if (!trimmedTitle) {
+    errors.title = "Title cannot be empty";
+  }
+
+  return errors;
+};

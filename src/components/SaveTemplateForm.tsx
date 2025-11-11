@@ -2,6 +2,7 @@ import { Action, ActionPanel, Form, showToast, Toast, useNavigation } from "@ray
 import { FormValues } from "../types";
 import { useState } from "react";
 import { useTemplates } from "../hooks/useTemplates";
+import { validateTemplateTitle } from "../utils/validation";
 
 export interface TemplateForm {
   title: string;
@@ -33,12 +34,13 @@ const SaveTemplateForm = ({
 
   const handleSave = async (values: TemplateForm) => {
     try {
-      if (templates.find((t) => t.title === values.title)) {
-        setTitleError("Template title already present");
+      const errors = validateTemplateTitle(values.title, templates);
+      if (errors.title) {
+        setTitleError(errors.title);
         return;
       }
 
-      const id = await addTemplate(values.title, formValues);
+      const id = await addTemplate(values.title.trim(), formValues);
       setSelectedTemplateId(id);
 
       await showToast({
@@ -59,6 +61,12 @@ const SaveTemplateForm = ({
   const handleUpdate = async (values: TemplateForm) => {
     try {
       if (!selectedTemplateId || !updateTemplate) return;
+
+      const errors = validateTemplateTitle(values.title, templates, selectedTemplateId);
+      if (errors.title) {
+        setTitleError(errors.title);
+        return;
+      }
       await updateTemplate(selectedTemplateId, values.title, formValues);
 
       await showToast({
