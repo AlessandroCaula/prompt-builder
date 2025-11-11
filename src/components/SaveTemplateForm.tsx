@@ -1,38 +1,25 @@
 import { Action, ActionPanel, Form, showToast, Toast, useNavigation } from "@raycast/api";
-import { FormValues } from "../types";
 import { useState } from "react";
-import { useTemplates } from "../hooks/useTemplates";
+// import { useTemplates } from "../hooks/useTemplates";
 import { validateTemplateTitle } from "../utils/validation";
-
-export interface TemplateForm {
-  title: string;
-}
-
-export interface SaveTemplateFormProps {
-  addTemplate: (title: string, values: FormValues) => Promise<string>;
-  updateTemplate?: (id: string, title: string, values: FormValues) => Promise<void>;
-  selectedTemplateId?: string;
-  setSelectedTemplateId: React.Dispatch<React.SetStateAction<string>>;
-  formValues: FormValues;
-  isUpdate: boolean;
-  initialTitle?: string;
-}
+import { SaveTemplateFormProps } from "../types";
 
 const SaveTemplateForm = ({
   addTemplate,
   updateTemplate,
   selectedTemplateId,
   setSelectedTemplateId,
+  templates,
   formValues,
   isUpdate = false,
   initialTitle,
 }: SaveTemplateFormProps) => {
   const { pop } = useNavigation();
   const [title, setTitle] = useState(initialTitle || "");
-  const { templates } = useTemplates();
+  // const { templates } = useTemplates();
   const [titleError, setTitleError] = useState<string | undefined>();
 
-  const handleSave = async (values: TemplateForm) => {
+  const handleSave = async (values: {title: string}) => {
     try {
       const errors = validateTemplateTitle(values.title, templates);
       if (errors.title) {
@@ -58,7 +45,7 @@ const SaveTemplateForm = ({
     }
   };
 
-  const handleUpdate = async (values: TemplateForm) => {
+  const handleUpdate = async (values: {title: string}) => {
     try {
       if (!selectedTemplateId || !updateTemplate) return;
 

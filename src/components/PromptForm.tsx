@@ -1,9 +1,7 @@
 import {
   Action,
   ActionPanel,
-  Alert,
   Clipboard,
-  confirmAlert,
   Form,
   Icon,
   showHUD,
@@ -18,15 +16,22 @@ import PreviewPrompt from "./PreviewPrompt";
 import { validateForm } from "../utils/validation";
 import { usePersistentForm } from "../hooks/usePersistentForm";
 import SaveTemplateForm from "./SaveTemplateForm";
-import { useTemplates } from "../hooks/useTemplates";
+import { useTemplateActions } from "../hooks/useTemplateActions";
 
 const PromptForm = () => {
   const { push } = useNavigation();
   const [taskError, setTaskError] = useState<string | undefined>();
   const [showAdvanced, setShowAdvanced] = useState<boolean>(false);
   const { formValues, handleChange, resetForm, setFormValues } = usePersistentForm();
-  const { templates, storedTemplates, addTemplate, updateTemplate, removeTemplate } = useTemplates();
-  const [selectedTemplateId, setSelectedTemplateId] = useState<string>(templates[0].id);
+  const {
+    selectedTemplateId,
+    setSelectedTemplateId,
+    templates,
+    addTemplate,
+    updateTemplate,
+    loadTemplate,
+    handleTemplateDeletion,
+  } = useTemplateActions(setFormValues, resetForm);
 
   useEffect(() => {
     const hasAdvancedValues =
@@ -38,7 +43,7 @@ const PromptForm = () => {
       formValues.followup;
 
     if (hasAdvancedValues) setShowAdvanced(true);
-  }, []);
+  }, [formValues]);
 
   const validateAndGetPrompt = (values: FormValues): string | undefined => {
     const errors = validateForm(values);
@@ -70,41 +75,6 @@ const PromptForm = () => {
     }
   };
 
-  const loadTemplate = (templateId: string) => {
-    const loadedTemplate = storedTemplates.find((t) => t.id === templateId);
-    // console.log(loadedTemplate);
-    if (loadedTemplate) {
-      setSelectedTemplateId(templateId);
-      setFormValues(loadedTemplate);
-    }
-  };
-
-  const handleTemplateDeletion = async () => {
-    const confirmed = await confirmAlert({
-      title: "Delete Template",
-      message: "Are you sure you want to delete this template?",
-      primaryAction: { title: "Delete", style: Alert.ActionStyle.Destructive },
-    });
-
-    if (!confirmed) return;
-
-    try {
-      setSelectedTemplateId("none");
-      await removeTemplate(selectedTemplateId);
-      resetForm();
-      await showToast({
-        style: Toast.Style.Success,
-        title: "Template deleted",
-      });
-    } catch (error) {
-      await showToast({
-        style: Toast.Style.Failure,
-        title: "Failed to delete template",
-        message: String(error),
-      });
-    }
-  };
-
   return (
     <Form
       navigationTitle="Prompt Builder"
@@ -125,6 +95,7 @@ const PromptForm = () => {
               <SaveTemplateForm
                 addTemplate={addTemplate}
                 setSelectedTemplateId={setSelectedTemplateId}
+                templates={templates}
                 formValues={formValues}
                 isUpdate={false}
                 initialTitle={templates.find((t) => t.id === selectedTemplateId && t.id !== "none")?.title ?? ""}
@@ -144,6 +115,7 @@ const PromptForm = () => {
                     updateTemplate={updateTemplate}
                     selectedTemplateId={selectedTemplateId}
                     setSelectedTemplateId={setSelectedTemplateId}
+                    templates={templates}
                     formValues={formValues}
                     isUpdate={true}
                     initialTitle={templates.find((t) => t.id === selectedTemplateId)?.title ?? ""}

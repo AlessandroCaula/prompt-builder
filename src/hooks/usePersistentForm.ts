@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { FormValues } from "../types";
 import { LocalStorage } from "@raycast/api";
 
-export const usePersistentForm = () => { // initialValues: FormValues
+export const usePersistentForm = () => {
   const initialValues: FormValues = {
     role: "",
     task: "",

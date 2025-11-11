@@ -35,11 +35,18 @@ export interface PreviewPromptProps {
   prompt: string;
 }
 
-export interface Template {
+export interface Template extends FormValues {
   id: string;
   title: string;
 }
 
-export interface StoredTemplate extends FormValues {
-  id: string;
+export interface SaveTemplateFormProps {
+  addTemplate: (title: string, values: FormValues) => Promise<string>;
+  updateTemplate?: (id: string, title: string, values: FormValues) => Promise<void>;
+  selectedTemplateId?: string;
+  setSelectedTemplateId: React.Dispatch<React.SetStateAction<string>>;
+  templates: Template[];
+  formValues: FormValues;
+  isUpdate: boolean;
+  initialTitle?: string;
 }
