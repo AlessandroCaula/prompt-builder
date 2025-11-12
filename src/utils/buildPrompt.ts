@@ -89,12 +89,12 @@ const buildPrompt = (values: FormValues): string => {
     finalPrompt += `Conclude with a short summary highlighting key points.\n\n`;
   }
 
-  // Follow-up
+  // Em-dashes
   if (values.noEmDash) {
-    finalPrompt += `Avoid using em-dashes.\n\n`;
+    finalPrompt += `Use plain punctuation and avoid inserting em-dashes (—). Prefer commas or periods instead.\n\n`;
   }
 
   return finalPrompt.trim();
-};
+};  
 
 export default buildPrompt;

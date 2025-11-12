@@ -18,7 +18,7 @@ const SaveTemplateForm = ({
   const [title, setTitle] = useState(initialTitle || "");
   const [titleError, setTitleError] = useState<string | undefined>();
 
-  const handleSave = async (values: {title: string}) => {
+  const handleSave = async (values: { title: string }) => {
     try {
       const errors = validateTemplateTitle(values.title, templates);
       if (errors.title) {
@@ -44,7 +44,7 @@ const SaveTemplateForm = ({
     }
   };
 
-  const handleUpdate = async (values: {title: string}) => {
+  const handleUpdate = async (values: { title: string }) => {
     try {
       if (!selectedTemplateId || !updateTemplate) return;
 
@@ -69,6 +69,47 @@ const SaveTemplateForm = ({
       });
     }
   };
+
+  const oldTemplate = isUpdate ? templates.find((t) => t.id === selectedTemplateId) : undefined;
+  const formDescription = (() => {
+    const lines: string[] = [];
+
+    const pushLine = (label: string, oldValue?: string | boolean, newValue?: string | boolean) => {
+      if (isUpdate && oldTemplate) {
+        if (oldValue !== newValue) {
+          const oldText = oldValue ? `"${oldValue}"` : "-";
+          const newText = newValue ? `"${newValue}"` : "—";
+          lines.push(`• ${label}: ${oldText} → ${newText}`);
+        }
+      } else if (newValue) {
+        if (newValue !== "None") lines.push(`• ${label}: ${newValue}`);
+      }
+    };
+
+    pushLine("Role", oldTemplate?.role, formValues.role);
+    pushLine("Task", oldTemplate?.task, formValues.task);
+    pushLine("Reference", oldTemplate?.reference, formValues.reference);
+    pushLine("Format", oldTemplate?.format, formValues.format);
+    
+    pushLine("Tone", oldTemplate?.tone, formValues.tone);
+    pushLine("Audience", oldTemplate?.audience, formValues.audience);
+    pushLine("Creativity", oldTemplate?.creativity, formValues.creativity);
+    pushLine("Example", oldTemplate?.example, formValues.example);
+    pushLine("Meta", oldTemplate?.meta, formValues.meta);
+
+    pushLine("Reasoning", oldTemplate?.reasoning, formValues.reasoning);
+    pushLine("Sources", oldTemplate?.sources, formValues.sources);
+    pushLine("Summary", oldTemplate?.summary, formValues.summary);
+    pushLine("Avoid em-dashes", oldTemplate?.noEmDash, formValues.noEmDash);
+
+    if (lines.length === 0) {
+      return isUpdate ? "No changes detected in this template." : "You are about to save an empty template.";
+    }
+
+    return isUpdate
+      ? `You are about to update this template with the following changes:\n\n${lines.join("\n")}`
+      : `You are about to save a template with:\n\n${lines.join("\n")}`;
+  })();
 
   return (
     <Form
@@ -95,6 +136,8 @@ const SaveTemplateForm = ({
         }}
         error={titleError}
       />
+
+      <Form.Description title="Template Summary" text={formDescription} />
     </Form>
   );
 };
