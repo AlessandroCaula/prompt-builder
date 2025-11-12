@@ -90,8 +90,8 @@ const buildPrompt = (values: FormValues): string => {
   }
 
   // Follow-up
-  if (values.followup) {
-    finalPrompt += `At the end, suggest one related topic I could explore next.\n\n`;
+  if (values.noEmDash) {
+    finalPrompt += `Avoid using em-dashes.\n\n`;
   }
 
   return finalPrompt.trim();

@@ -16,7 +16,7 @@ export const usePersistentForm = () => {
     reasoning: false,
     sources: false,
     summary: false,
-    followup: false,
+    noEmDash: false,
   };
 
   const [formValues, setFormValues] = useState<FormValues>(initialValues);

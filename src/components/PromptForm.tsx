@@ -1,5 +1,5 @@
 import { Form } from "@raycast/api";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { creativity, tones } from "../types";
 import { usePersistentForm } from "../hooks/usePersistentForm";
 import { useTemplateActions } from "../hooks/useTemplateActions";
@@ -7,7 +7,6 @@ import PromptFormActions from "./PromptFormActions";
 
 const PromptForm = () => {
   const [taskError, setTaskError] = useState<string | undefined>();
-  const [showAdvanced, setShowAdvanced] = useState<boolean>(false);
   const { formValues, handleChange, resetForm, setFormValues } = usePersistentForm();
   const {
     selectedTemplateId,
@@ -18,18 +17,6 @@ const PromptForm = () => {
     loadTemplate,
     deleteTemplate,
   } = useTemplateActions(setFormValues, resetForm);
-
-  useEffect(() => {
-    const hasAdvancedValues =
-      formValues.example ||
-      formValues.meta ||
-      formValues.reasoning ||
-      formValues.sources ||
-      formValues.summary ||
-      formValues.followup;
-
-    if (hasAdvancedValues) setShowAdvanced(true);
-  }, [formValues]);
 
   const formState = { formValues, resetForm, setTaskError };
   const templateState = {
@@ -94,6 +81,8 @@ const PromptForm = () => {
         onChange={(v) => handleChange("reference", v)}
       />
 
+      <Form.Separator />
+
       <Form.TextArea
         id="format"
         title="Format / Constraints"
@@ -136,68 +125,57 @@ const PromptForm = () => {
         ))}
       </Form.Dropdown>
 
-      <Form.Checkbox
-        id="showAdvanced"
-        label="Show advanced options"
-        value={showAdvanced}
-        onChange={(checked) => setShowAdvanced(checked)}
+      <Form.Separator />
+
+      <Form.TextArea
+        id="example"
+        title="Example"
+        placeholder="E.g. Input → Output"
+        info="Show the style you want"
+        value={formValues.example}
+        onChange={(v) => handleChange("example", v)}
       />
 
-      {showAdvanced && (
-        <>
-          <Form.Separator />
+      <Form.TextArea
+        id="meta"
+        title="Meta Instructions"
+        placeholder="E.g. Always think step-by-step before answering"
+        info="Force extra rules or logic."
+        value={formValues.meta}
+        onChange={(v) => handleChange("meta", v)}
+      />
 
-          <Form.TextArea
-            id="example"
-            title="Example"
-            placeholder="E.g. Input → Output"
-            info="Show the style you want"
-            value={formValues.example}
-            onChange={(v) => handleChange("example", v)}
-          />
+      <Form.Checkbox
+        id="noEmDash"
+        label="Avoid em-dashes"
+        info="AI tends to insert em-dashes. Enable this to avoid them."
+        value={formValues.noEmDash}
+        onChange={(v) => handleChange("noEmDash", v)}
+      />
 
-          <Form.TextArea
-            id="meta"
-            title="Meta Instructions"
-            placeholder="E.g. Always think step-by-step before answering"
-            info="Force extra rules or logic."
-            value={formValues.meta}
-            onChange={(v) => handleChange("meta", v)}
-          />
+      <Form.Checkbox
+        id="reasoning"
+        label="Include reasoning style"
+        info="AI explains its thought process"
+        value={formValues.reasoning}
+        onChange={(v) => handleChange("reasoning", v)}
+      />
 
-          <Form.Checkbox
-            id="reasoning"
-            label="Include reasoning style"
-            info="AI explains its thought process"
-            value={formValues.reasoning}
-            onChange={(v) => handleChange("reasoning", v)}
-          />
+      <Form.Checkbox
+        id="sources"
+        label="Include sources"
+        info="AI provides sources or citations when possible"
+        value={formValues.sources}
+        onChange={(v) => handleChange("sources", v)}
+      />
 
-          <Form.Checkbox
-            id="sources"
-            label="Include sources"
-            info="AI provides sources or citations when possible"
-            value={formValues.sources}
-            onChange={(v) => handleChange("sources", v)}
-          />
-
-          <Form.Checkbox
-            id="summary"
-            label="End with a summary"
-            info="AI concludes its answer with a brief recap"
-            value={formValues.summary}
-            onChange={(v) => handleChange("summary", v)}
-          />
-
-          <Form.Checkbox
-            id="followup"
-            label="Include follow-up suggestion"
-            info="AI suggests next topic"
-            value={formValues.followup}
-            onChange={(v) => handleChange("followup", v)}
-          />
-        </>
-      )}
+      <Form.Checkbox
+        id="summary"
+        label="End with a summary"
+        info="AI concludes its answer with a brief recap"
+        value={formValues.summary}
+        onChange={(v) => handleChange("summary", v)}
+      />
     </Form>
   );
 };

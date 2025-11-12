@@ -20,7 +20,7 @@ export const useTemplates = () => {
     reasoning: false,
     sources: false,
     summary: false,
-    followup: false,
+    noEmDash: false,
   };
 
   const [templates, setTemplates] = useState<Template[]>([defaultTemplate]);

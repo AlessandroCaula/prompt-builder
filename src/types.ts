@@ -28,7 +28,7 @@ export interface FormValues {
   reasoning?: boolean;
   sources?: boolean;
   summary?: boolean;
-  followup?: boolean;
+  noEmDash?: boolean;
 }
 
 export interface PreviewPromptProps {
