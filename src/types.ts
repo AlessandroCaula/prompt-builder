@@ -50,3 +50,19 @@ export interface SaveTemplateFormProps {
   isUpdate: boolean;
   initialTitle?: string;
 }
+
+export interface PromptFormActionsProp {
+  formState: {
+    formValues: FormValues;
+    resetForm: () => void;
+    setTaskError: React.Dispatch<React.SetStateAction<string | undefined>>;
+  };
+  templateState: {
+    selectedTemplateId: string;
+    setSelectedTemplateId: React.Dispatch<React.SetStateAction<string>>;
+    templates: Template[];
+    addTemplate: (title: string, values: FormValues) => Promise<string>;
+    updateTemplate: (id: string, title: string, values: FormValues) => Promise<void>;
+    deleteTemplate: () => Promise<void>;
+  };
+}

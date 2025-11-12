@@ -16,7 +16,6 @@ const SaveTemplateForm = ({
 }: SaveTemplateFormProps) => {
   const { pop } = useNavigation();
   const [title, setTitle] = useState(initialTitle || "");
-  // const { templates } = useTemplates();
   const [titleError, setTitleError] = useState<string | undefined>();
 
   const handleSave = async (values: {title: string}) => {

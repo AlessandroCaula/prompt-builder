@@ -1,39 +1,15 @@
 import { Action, ActionPanel, Clipboard, Icon, showHUD, showToast, Toast, useNavigation } from "@raycast/api";
 import SaveTemplateForm from "./SaveTemplateForm";
-import { FormValues, Template } from "../types";
+import { FormValues, PromptFormActionsProp } from "../types";
 import { validateForm } from "../utils/validation";
 import buildPrompt from "../utils/buildPrompt";
 import PreviewPrompt from "./PreviewPrompt";
-// import { useTemplateActions } from "../hooks/useTemplateActions";
 
-export interface PromptFormActionsProp {
-  formValues: FormValues;
-  setFormValues: (values: FormValues) => void;
-  resetForm: () => void;
-  setTaskError: React.Dispatch<React.SetStateAction<string | undefined>>;
-  selectedTemplateId: string;
-  setSelectedTemplateId: React.Dispatch<React.SetStateAction<string>>;
-  templates: Template[];
-  addTemplate: (title: string, values: FormValues) => Promise<string>;
-  updateTemplate: (id: string, title: string, values: FormValues) => Promise<void>;
-  deleteTemplate: () => Promise<void>;
-}
-
-const PromptFormActions = ({
-  formValues,
-  resetForm,
-  setTaskError,
-  selectedTemplateId,
-  setSelectedTemplateId,
-  templates,
-  addTemplate,
-  updateTemplate,
-  deleteTemplate
-}: PromptFormActionsProp) => {
+const PromptFormActions = ({ formState, templateState }: PromptFormActionsProp) => {
   const { push } = useNavigation();
-
-  // const { selectedTemplateId, setSelectedTemplateId, templates, addTemplate, updateTemplate, handleTemplateDeletion } =
-  //   useTemplateActions(setFormValues, resetForm);
+  const { formValues, resetForm, setTaskError } = formState;
+  const { selectedTemplateId, setSelectedTemplateId, templates, addTemplate, updateTemplate, deleteTemplate } =
+    templateState;
 
   const validateAndGetPrompt = (values: FormValues): string | undefined => {
     const errors = validateForm(values);

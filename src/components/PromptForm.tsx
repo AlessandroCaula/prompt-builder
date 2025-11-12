@@ -1,16 +1,11 @@
-import { Action, ActionPanel, Clipboard, Form, Icon, showHUD, showToast, Toast, useNavigation } from "@raycast/api";
+import { Form } from "@raycast/api";
 import { useEffect, useState } from "react";
-// import buildPrompt from "../utils/buildPrompt";
-import { creativity, FormValues, tones } from "../types";
-// import PreviewPrompt from "./PreviewPrompt";
-// import { validateForm } from "../utils/validation";
+import { creativity, tones } from "../types";
 import { usePersistentForm } from "../hooks/usePersistentForm";
-// import SaveTemplateForm from "./SaveTemplateForm";
 import { useTemplateActions } from "../hooks/useTemplateActions";
 import PromptFormActions from "./PromptFormActions";
 
 const PromptForm = () => {
-  // const { push } = useNavigation();
   const [taskError, setTaskError] = useState<string | undefined>();
   const [showAdvanced, setShowAdvanced] = useState<boolean>(false);
   const { formValues, handleChange, resetForm, setFormValues } = usePersistentForm();
@@ -36,133 +31,20 @@ const PromptForm = () => {
     if (hasAdvancedValues) setShowAdvanced(true);
   }, [formValues]);
 
-  // const validateAndGetPrompt = (values: FormValues): string | undefined => {
-  //   const errors = validateForm(values);
-  //   if (errors.task) {
-  //     setTaskError(errors.task);
-  //     return;
-  //   }
-  //   const generatedPrompt = buildPrompt(values);
-  //   return generatedPrompt;
-  // };
-
-  // const handlePreviewPrompt = async (values: FormValues) => {
-  //   const prompt = validateAndGetPrompt(values);
-  //   if (!prompt) return;
-
-  //   push(<PreviewPrompt prompt={prompt} />);
-  // };
-
-  // const handleCopyToClipboard = async (values: FormValues) => {
-  //   try {
-  //     const prompt = validateAndGetPrompt(values);
-  //     if (!prompt) return;
-
-  //     await Clipboard.copy(prompt);
-  //     await showHUD("Copied to Clipboard");
-  //   } catch (error) {
-  //     await showHUD("Failed to Copy Prompt");
-  //     console.log("Clipboard error:", error);
-  //   }
-  // };
+  const formState = { formValues, resetForm, setTaskError };
+  const templateState = {
+    selectedTemplateId,
+    setSelectedTemplateId,
+    templates,
+    addTemplate,
+    updateTemplate,
+    deleteTemplate,
+  };
 
   return (
     <Form
       navigationTitle="Prompt Builder"
-      actions={
-        <PromptFormActions
-          formValues={formValues}
-          setFormValues={setFormValues}
-          resetForm={resetForm}
-          setTaskError={setTaskError}
-          selectedTemplateId={selectedTemplateId}
-          setSelectedTemplateId={setSelectedTemplateId}
-          templates={templates}
-          addTemplate={addTemplate}
-          updateTemplate={updateTemplate}
-          deleteTemplate={deleteTemplate}
-        />
-      }
-      // enableDrafts
-      // actions={
-      // <ActionPanel>
-      //   <Action.SubmitForm title="Copy to Clipboard" onSubmit={handleCopyToClipboard} />
-      //   <Action.SubmitForm
-      //     title="Preview Prompt"
-      //     icon={Icon.Eye}
-      //     onSubmit={handlePreviewPrompt}
-      //     shortcut={{ modifiers: ["cmd"], key: "y" }}
-      //   />
-      //   <Action.Push
-      //     title="Save as Template"
-      //     icon={Icon.SaveDocument}
-      //     shortcut={{ modifiers: ["cmd"], key: "s" }}
-      //     target={
-      //       <SaveTemplateForm
-      //         addTemplate={addTemplate}
-      //         setSelectedTemplateId={setSelectedTemplateId}
-      //         templates={templates}
-      //         formValues={formValues}
-      //         isUpdate={false}
-      //         initialTitle={templates.find((t) => t.id === selectedTemplateId && t.id !== "none")?.title ?? ""}
-      //       />
-      //     }
-      //   />
-
-      //   {selectedTemplateId !== "none" && (
-      //     <>
-      //       <Action.Push
-      //         title="Update Template"
-      //         icon={Icon.Repeat}
-      //         shortcut={{ modifiers: ["cmd"], key: "u" }}
-      //         target={
-      //           <SaveTemplateForm
-      //             addTemplate={addTemplate}
-      //             updateTemplate={updateTemplate}
-      //             selectedTemplateId={selectedTemplateId}
-      //             setSelectedTemplateId={setSelectedTemplateId}
-      //             templates={templates}
-      //             formValues={formValues}
-      //             isUpdate={true}
-      //             initialTitle={templates.find((t) => t.id === selectedTemplateId)?.title ?? ""}
-      //           />
-      //         }
-      //       />
-      //       <Action
-      //         title="Delete Template"
-      //         icon={Icon.Trash}
-      //         style={Action.Style.Destructive}
-      //         shortcut={{ modifiers: ["cmd", "shift"], key: "d" }}
-      //         onAction={handleTemplateDeletion}
-      //       />
-      //       <Action
-      //         title="New Empty Template"
-      //         icon={Icon.BlankDocument}
-      //         shortcut={{ modifiers: ["cmd"], key: "n" }}
-      //         onAction={() => {
-      //           setSelectedTemplateId("none");
-      //           resetForm();
-      //         }}
-      //       />
-      //     </>
-      //   )}
-
-      //   <Action
-      //     title="Clear All"
-      //     icon={Icon.Trash}
-      //     style={Action.Style.Destructive}
-      //     shortcut={{ modifiers: ["cmd"], key: "d" }}
-      //     onAction={async () => {
-      //       resetForm();
-      //       setTaskError(undefined);
-      //       await showToast({
-      //         style: Toast.Style.Success,
-      //         title: "Form cleared",
-      //       });
-      //     }}
-      //   />
-      // </ActionPanel>
-      // }
+      actions={<PromptFormActions formState={formState} templateState={templateState} />}
     >
       <Form.Dropdown
         id="template"

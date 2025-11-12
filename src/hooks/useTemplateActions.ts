@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FormValues } from "../types";
 import { useTemplates } from "./useTemplates";
 import { Alert, confirmAlert, LocalStorage, showToast, Toast } from "@raycast/api";
