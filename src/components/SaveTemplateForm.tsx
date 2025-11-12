@@ -1,6 +1,5 @@
 import { Action, ActionPanel, Form, showToast, Toast, useNavigation } from "@raycast/api";
 import { useState } from "react";
-// import { useTemplates } from "../hooks/useTemplates";
 import { validateTemplateTitle } from "../utils/validation";
 import { SaveTemplateFormProps } from "../types";
 
@@ -74,15 +73,25 @@ const SaveTemplateForm = ({
   const formDescription = (() => {
     const lines: string[] = [];
 
+    const formatValue = (value?: string | boolean) => {
+      if (typeof value === "boolean") {
+        return value ? "Enabled" : "Disabled"
+      }
+      return value
+    }
+
     const pushLine = (label: string, oldValue?: string | boolean, newValue?: string | boolean) => {
+      const formatNewValue = formatValue(newValue);
+      const formatOldValue = formatValue(oldValue);
+
       if (isUpdate && oldTemplate) {
         if (oldValue !== newValue) {
-          const oldText = oldValue ? `"${oldValue}"` : "-";
-          const newText = newValue ? `"${newValue}"` : "—";
+          const oldText = formatOldValue ? `${formatOldValue}` : "--";
+          const newText = formatNewValue ? `${formatNewValue}` : "--";
           lines.push(`• ${label}: ${oldText} → ${newText}`);
         }
       } else if (newValue) {
-        if (newValue !== "None") lines.push(`• ${label}: ${newValue}`);
+        if (newValue !== "None") lines.push(`• ${label}: ${formatNewValue}`);
       }
     };
 
@@ -90,7 +99,7 @@ const SaveTemplateForm = ({
     pushLine("Task", oldTemplate?.task, formValues.task);
     pushLine("Reference", oldTemplate?.reference, formValues.reference);
     pushLine("Format", oldTemplate?.format, formValues.format);
-    
+
     pushLine("Tone", oldTemplate?.tone, formValues.tone);
     pushLine("Audience", oldTemplate?.audience, formValues.audience);
     pushLine("Creativity", oldTemplate?.creativity, formValues.creativity);

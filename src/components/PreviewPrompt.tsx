@@ -8,7 +8,7 @@ const PreviewPrompt = ({ prompt }: PreviewPromptProps) => {
   return (
     <Detail
       navigationTitle="Generated Prompt"
-      markdown={`\`\`\`\n${prompt}\n\`\`\``}
+      markdown={`\`\`\` \n${prompt} \n\`\`\``}
       actions={
         <ActionPanel>
           <Action.CopyToClipboard title="Copy Prompt" content={prompt} />

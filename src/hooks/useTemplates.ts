@@ -28,7 +28,7 @@ export const useTemplates = () => {
   const saveTemplates = async (updated: Template[]) => {
     const withoutNone = updated.filter((t) => t.id !== "none");
     setTemplates([defaultTemplate, ...withoutNone]);
-    await LocalStorage.setItem(TEMPLATE_KEY, JSON.stringify(updated));
+    await LocalStorage.setItem(TEMPLATE_KEY, JSON.stringify(withoutNone));
   };
 
   useEffect(() => {
@@ -38,7 +38,7 @@ export const useTemplates = () => {
         if (!savedTemplates) return;
 
         const parsed: Template[] = JSON.parse(savedTemplates);
-        // setTemplates(parsed);
+
         setTemplates([defaultTemplate, ...parsed.filter((t) => t.id !== "none")]);
       } catch (error) {
         console.error("Failed to load templates", error);
