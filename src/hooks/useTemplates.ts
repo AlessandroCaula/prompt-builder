@@ -1,46 +1,48 @@
 import { useEffect, useState } from "react";
 import { FormValues, Template } from "../types";
-import { randomUUID } from "crypto";
 import { LocalStorage } from "@raycast/api";
 
 const TEMPLATE_KEY = "promptTemplateValues";
 
 export const useTemplates = () => {
-  const [templates, setTemplates] = useState<Template[]>([
-    {
-      id: "none",
-      title: "None",
-      role: "",
-      task: "",
-      reference: "",
-      format: "",
-      tone: "None",
-      audience: "",
-      creativity: "None",
-      example: "",
-      meta: "",
-      reasoning: false,
-      sources: false,
-      summary: false,
-      followup: false,
-    },
-  ]);
+  const defaultTemplate: Template = {
+    id: "none",
+    title: "None",
+    role: "",
+    task: "",
+    reference: "",
+    format: "",
+    tone: "None",
+    audience: "",
+    creativity: "None",
+    example: "",
+    meta: "",
+    reasoning: false,
+    sources: false,
+    summary: false,
+    followup: false,
+  };
+
+  const [templates, setTemplates] = useState<Template[]>([defaultTemplate]);
 
   const saveTemplates = async (updated: Template[]) => {
-    setTemplates(updated);
+    const withoutNone = updated.filter((t) => t.id !== "none");
+    setTemplates([defaultTemplate, ...withoutNone]);
     await LocalStorage.setItem(TEMPLATE_KEY, JSON.stringify(updated));
   };
 
   useEffect(() => {
     const loadTemplates = async () => {
-      const savedTemplates = await LocalStorage.getItem<string>(TEMPLATE_KEY);
-      if (savedTemplates) {
-        try {
-          setTemplates(JSON.parse(savedTemplates));
-        } catch (error) {
-          console.log("Failed to parse saved templates", error);
-          await LocalStorage.removeItem(TEMPLATE_KEY);
-        }
+      try {
+        const savedTemplates = await LocalStorage.getItem<string>(TEMPLATE_KEY);
+        if (!savedTemplates) return;
+
+        const parsed: Template[] = JSON.parse(savedTemplates);
+        // setTemplates(parsed);
+        setTemplates([defaultTemplate, ...parsed.filter((t) => t.id !== "none")]);
+      } catch (error) {
+        console.error("Failed to load templates", error);
+        await LocalStorage.removeItem(TEMPLATE_KEY);
       }
     };
 
@@ -48,7 +50,7 @@ export const useTemplates = () => {
   }, []);
 
   const addTemplate = async (title: string, values: FormValues): Promise<string> => {
-    const id = randomUUID();
+    const id = new Date().getTime().toString();
     const newStoredTemplate: Template = { ...values, title, id };
     const updatedStoredTemplates = [...templates, newStoredTemplate];
     saveTemplates(updatedStoredTemplates);
