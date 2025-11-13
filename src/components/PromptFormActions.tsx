@@ -1,4 +1,15 @@
-import { Action, ActionPanel, Clipboard, Icon, showHUD, showToast, Toast, useNavigation } from "@raycast/api";
+import {
+  Action,
+  ActionPanel,
+  Alert,
+  Clipboard,
+  confirmAlert,
+  Icon,
+  showHUD,
+  showToast,
+  Toast,
+  useNavigation,
+} from "@raycast/api";
 import SaveTemplateForm from "./SaveTemplateForm";
 import { FormValues, PromptFormActionsProp } from "../types";
 import { validateForm } from "../utils/validation";
@@ -7,7 +18,7 @@ import PreviewPrompt from "./PreviewPrompt";
 
 const PromptFormActions = ({ formState, templateState }: PromptFormActionsProp) => {
   const { push } = useNavigation();
-  const { formValues, resetForm, setTaskError } = formState;
+  const { formValues, resetFormValues, setTaskError } = formState;
   const { selectedTemplateId, setSelectedTemplateId, templates, addTemplate, updateTemplate, deleteTemplate } =
     templateState;
 
@@ -38,6 +49,30 @@ const PromptFormActions = ({ formState, templateState }: PromptFormActionsProp) 
     } catch (error) {
       await showHUD("Failed to Copy Prompt");
       console.log("Clipboard error:", error);
+    }
+  };
+
+  const handleDeleteTemplate = async () => {
+    const confirmed = await confirmAlert({
+      title: "Delete Template",
+      message: "Are you sure you want to delete this template?",
+      primaryAction: { title: "Delete", style: Alert.ActionStyle.Destructive },
+    });
+
+    if (!confirmed) return;
+
+    try {
+      await deleteTemplate();
+      await showToast({
+        style: Toast.Style.Success,
+        title: "Template deleted",
+      });
+    } catch (error) {
+      await showToast({
+        style: Toast.Style.Failure,
+        title: "Failed to delete template",
+        message: String(error),
+      });
     }
   };
 
@@ -90,7 +125,8 @@ const PromptFormActions = ({ formState, templateState }: PromptFormActionsProp) 
             icon={Icon.Trash}
             style={Action.Style.Destructive}
             shortcut={{ modifiers: ["cmd", "shift"], key: "d" }}
-            onAction={deleteTemplate}
+            // onAction={deleteTemplate}
+            onAction={handleDeleteTemplate}
           />
           <Action
             title="New Empty Template"
@@ -98,7 +134,7 @@ const PromptFormActions = ({ formState, templateState }: PromptFormActionsProp) 
             shortcut={{ modifiers: ["cmd"], key: "n" }}
             onAction={() => {
               setSelectedTemplateId("none");
-              resetForm();
+              resetFormValues();
             }}
           />
         </>
@@ -110,7 +146,7 @@ const PromptFormActions = ({ formState, templateState }: PromptFormActionsProp) 
         style={Action.Style.Destructive}
         shortcut={{ modifiers: ["cmd"], key: "d" }}
         onAction={async () => {
-          resetForm();
+          resetFormValues();
           setTaskError(undefined);
           await showToast({
             style: Toast.Style.Success,

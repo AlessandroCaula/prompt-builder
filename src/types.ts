@@ -54,7 +54,7 @@ export interface SaveTemplateFormProps {
 export interface PromptFormActionsProp {
   formState: {
     formValues: FormValues;
-    resetForm: () => void;
+    resetFormValues: () => void;
     setTaskError: React.Dispatch<React.SetStateAction<string | undefined>>;
   };
   templateState: {

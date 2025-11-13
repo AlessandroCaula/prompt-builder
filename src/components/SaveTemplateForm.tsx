@@ -53,7 +53,6 @@ const SaveTemplateForm = ({
         return;
       }
       await updateTemplate(selectedTemplateId, values.title, formValues);
-
       await showToast({
         style: Toast.Style.Success,
         title: "Template Updated",

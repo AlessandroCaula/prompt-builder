@@ -1,39 +1,25 @@
 import { Form } from "@raycast/api";
 import { useState } from "react";
 import { creativity, tones } from "../types";
-import { usePersistentForm } from "../hooks/usePersistentForm";
-import { useTemplateActions } from "../hooks/useTemplateActions";
 import PromptFormActions from "./PromptFormActions";
-import { useTemplateManager } from "../hooks/useTemplateManager";
+import { useTemplate } from "../hooks/useTemplate";
 
 const PromptForm = () => {
   const [taskError, setTaskError] = useState<string | undefined>();
-  // const { formValues, handleChange, resetForm, setFormValues } = usePersistentForm();
-  // const {
-  //   selectedTemplateId,
-  //   setSelectedTemplateId,
-  //   templates,
-  //   addTemplate,
-  //   updateTemplate,
-  //   openTemplate,
-  //   deleteTemplate,
-  // } = useTemplateActions(setFormValues, resetForm);
-
   const {
     templates,
     formValues,
     selectedTemplateId,
     setSelectedTemplateId,
-    // setFormValues,
     handleChange,
     openTemplate,
     addTemplate,
     updateTemplate,
     deleteTemplate,
-    resetForm,
-  } = useTemplateManager();
+    resetFormValues,
+  } = useTemplate();
 
-  const formState = { formValues, resetForm, setTaskError };
+  const formState = { formValues, resetFormValues, setTaskError };
   const templateState = {
     selectedTemplateId,
     setSelectedTemplateId,
@@ -52,14 +38,13 @@ const PromptForm = () => {
         id="template"
         title="Use Template"
         value={selectedTemplateId}
-        onChange={(temp) => {
-          openTemplate(temp);
-          setSelectedTemplateId(temp);
+        onChange={(templateId) => {
+          openTemplate(templateId);
         }}
       >
-        {templates.map((temp) => (
-          <Form.Dropdown.Item key={temp.id} value={temp.id} title={temp.title} />
-        ))}
+        {templates.map((template) => {
+          return <Form.Dropdown.Item key={template.id} value={template.id} title={template.title} />;
+        })}
       </Form.Dropdown>
 
       <Form.Description text="Build your prompt (Preview with ⌘Y)" />
