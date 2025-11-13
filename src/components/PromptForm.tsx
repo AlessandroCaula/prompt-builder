@@ -4,19 +4,34 @@ import { creativity, tones } from "../types";
 import { usePersistentForm } from "../hooks/usePersistentForm";
 import { useTemplateActions } from "../hooks/useTemplateActions";
 import PromptFormActions from "./PromptFormActions";
+import { useTemplateManager } from "../hooks/useTemplateManager";
 
 const PromptForm = () => {
   const [taskError, setTaskError] = useState<string | undefined>();
-  const { formValues, handleChange, resetForm, setFormValues } = usePersistentForm();
+  // const { formValues, handleChange, resetForm, setFormValues } = usePersistentForm();
+  // const {
+  //   selectedTemplateId,
+  //   setSelectedTemplateId,
+  //   templates,
+  //   addTemplate,
+  //   updateTemplate,
+  //   openTemplate,
+  //   deleteTemplate,
+  // } = useTemplateActions(setFormValues, resetForm);
+
   const {
+    templates,
+    formValues,
     selectedTemplateId,
     setSelectedTemplateId,
-    templates,
+    // setFormValues,
+    handleChange,
+    openTemplate,
     addTemplate,
     updateTemplate,
-    loadTemplate,
     deleteTemplate,
-  } = useTemplateActions(setFormValues, resetForm);
+    resetForm,
+  } = useTemplateManager();
 
   const formState = { formValues, resetForm, setTaskError };
   const templateState = {
@@ -38,7 +53,7 @@ const PromptForm = () => {
         title="Use Template"
         value={selectedTemplateId}
         onChange={(temp) => {
-          loadTemplate(temp);
+          openTemplate(temp);
           setSelectedTemplateId(temp);
         }}
       >

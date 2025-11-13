@@ -4,6 +4,7 @@ import { useTemplates } from "./useTemplates";
 import { Alert, confirmAlert, LocalStorage, showToast, Toast } from "@raycast/api";
 
 export const useTemplateActions = (setFormValues: (values: FormValues) => void, resetForm: () => void) => {
+  
   const { templates, addTemplate, updateTemplate, removeTemplate } = useTemplates();
   const [selectedTemplateId, setSelectedTemplateId] = useState<string>("none");
 
@@ -24,7 +25,7 @@ export const useTemplateActions = (setFormValues: (values: FormValues) => void, 
   //   restoreLastTemplate();
   // }, [templates]);
 
-  const loadTemplate = async (templateId: string) => {
+  const openTemplate = async (templateId: string) => {
     const loadedTemplate = templates.find((t) => t.id === templateId);
     if (!loadedTemplate) return;
 
@@ -65,7 +66,7 @@ export const useTemplateActions = (setFormValues: (values: FormValues) => void, 
     templates,
     addTemplate,
     updateTemplate,
-    loadTemplate,
+    openTemplate,
     deleteTemplate,
   };
 };
