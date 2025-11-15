@@ -3,8 +3,7 @@ import { FormValues, Template } from "../types";
 import { templateService } from "../services/templateService";
 
 export const useTemplate = () => {
-  const { defaultTemplate, load, save, remove } = templateService;
-
+  const { defaultTemplate, load, save, remove, removeAll } = templateService;
   const [templates, setTemplates] = useState([defaultTemplate]);
   const [formValues, setFormValues] = useState<FormValues>({ ...defaultTemplate });
   const [selectedTemplateId, setSelectedTemplateId] = useState<string>("none");
@@ -52,10 +51,22 @@ export const useTemplate = () => {
     resetFormValues();
   };
 
+  // Delete all templates
+  const deleteAllTemplates = async () => {
+    await removeAll();
+    setTemplates([defaultTemplate]);
+    setSelectedTemplateId("none");
+    setFormValues(defaultTemplate);
+  };
+
   // Open a template (load into form)
   const openTemplate = (id: string) => {
     const template = templates.find((t) => t.id === id);
-    if (!template) return;
+    if (!template) {
+      setSelectedTemplateId("none");
+      setFormValues(defaultTemplate);
+      return;
+    }
     setSelectedTemplateId(id);
     setFormValues(template);
   };
@@ -82,5 +93,6 @@ export const useTemplate = () => {
     updateTemplate,
     deleteTemplate,
     resetFormValues,
+    deleteAllTemplates,
   };
 };

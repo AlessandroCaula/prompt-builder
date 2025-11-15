@@ -19,7 +19,7 @@ import PreviewPrompt from "./PreviewPrompt";
 const PromptFormActions = ({ formState, templateState }: PromptFormActionsProp) => {
   const { push } = useNavigation();
   const { formValues, resetFormValues, setTaskError } = formState;
-  const { selectedTemplateId, setSelectedTemplateId, templates, addTemplate, updateTemplate, deleteTemplate } =
+  const { selectedTemplateId, setSelectedTemplateId, templates, addTemplate, updateTemplate, deleteTemplate, deleteAllTemplates } =
     templateState;
 
   const validateAndGetPrompt = (values: FormValues): string | undefined => {
@@ -54,7 +54,7 @@ const PromptFormActions = ({ formState, templateState }: PromptFormActionsProp) 
 
   const handleDeleteTemplate = async () => {
     const confirmed = await confirmAlert({
-      title: "Delete Template",
+      title: `Delete Template "${templates.find((t) => t.id === selectedTemplateId)?.title}"`,
       message: "Are you sure you want to delete this template?",
       primaryAction: { title: "Delete", style: Alert.ActionStyle.Destructive },
     });
@@ -71,6 +71,31 @@ const PromptFormActions = ({ formState, templateState }: PromptFormActionsProp) 
       await showToast({
         style: Toast.Style.Failure,
         title: "Failed to delete template",
+        message: String(error),
+      });
+    }
+  };
+
+  const handleDeleteAllTemplates = async () => {
+    const confirmed = await confirmAlert({
+      title: "Delete All Template",
+      message: `Are you sure you want to delete all ${templates.length - 1} templates? This cannot be undone.`,
+      primaryAction: {
+        title: "Delete All",
+        style: Alert.ActionStyle.Destructive,
+      },
+    });
+    if (!confirmed) return;
+    try {
+      await deleteAllTemplates();
+      await showToast({
+        style: Toast.Style.Success,
+        title: "All templates deleted",
+      });
+    } catch (error) {
+      await showToast({
+        style: Toast.Style.Failure,
+        title: "Failed to delete templates",
         message: String(error),
       });
     }
@@ -141,7 +166,7 @@ const PromptFormActions = ({ formState, templateState }: PromptFormActionsProp) 
 
       <Action
         title="Clear Form"
-        icon={Icon.Trash}
+        icon={Icon.Eraser}
         style={Action.Style.Destructive}
         shortcut={{ modifiers: ["cmd"], key: "d" }}
         onAction={async () => {
@@ -152,6 +177,14 @@ const PromptFormActions = ({ formState, templateState }: PromptFormActionsProp) 
             title: "Form cleared",
           });
         }}
+      />
+
+      <Action
+        title="Delete All Templates"
+        icon={Icon.Trash}
+        style={Action.Style.Destructive}
+        shortcut={{ modifiers: ["cmd", "shift", "opt"], key: "d" }}
+        onAction={handleDeleteAllTemplates}
       />
     </ActionPanel>
   );

@@ -22,11 +22,12 @@ const defaultTemplate: Template = {
 };
 
 const load = async (): Promise<Template[]> => {
-  const storedTemplates = await LocalStorage.getItem<string>(TEMPLATE_KEY);
-  if (!storedTemplates) return [];
   try {
+    const storedTemplates = await LocalStorage.getItem<string>(TEMPLATE_KEY);
+    if (!storedTemplates) return [];
     return JSON.parse(storedTemplates);
-  } catch {
+  } catch (error) {
+    console.error("Failed to load templates:", error);
     await LocalStorage.removeItem(TEMPLATE_KEY);
     return [];
   }
@@ -43,9 +44,14 @@ const remove = async (id: string) => {
   await save(updated);
 };
 
+const removeAll = async () => {
+  await LocalStorage.removeItem(TEMPLATE_KEY);
+}
+
 export const templateService = {
   defaultTemplate,
   load,
   save,
   remove,
+  removeAll
 };

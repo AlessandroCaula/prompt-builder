@@ -64,5 +64,6 @@ export interface PromptFormActionsProp {
     addTemplate: (title: string, values: FormValues) => Promise<string>;
     updateTemplate: (id: string, title: string, values: FormValues) => Promise<void>;
     deleteTemplate: () => Promise<void>;
+    deleteAllTemplates: () => Promise<void>;
   };
 }
