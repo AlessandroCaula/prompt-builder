@@ -95,6 +95,6 @@ const buildPrompt = (values: FormValues): string => {
   }
 
   return finalPrompt.trim();
-};  
+};
 
 export default buildPrompt;

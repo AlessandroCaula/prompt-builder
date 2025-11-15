@@ -74,10 +74,10 @@ const SaveTemplateForm = ({
 
     const formatValue = (value?: string | boolean) => {
       if (typeof value === "boolean") {
-        return value ? "Enabled" : "Disabled"
+        return value ? "Enabled" : "Disabled";
       }
-      return value
-    }
+      return value;
+    };
 
     const pushLine = (label: string, oldValue?: string | boolean, newValue?: string | boolean) => {
       const formatNewValue = formatValue(newValue);

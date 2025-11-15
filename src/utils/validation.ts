@@ -14,7 +14,9 @@ export const validateTemplateTitle = (title: string, templates: Template[], sele
   const errors: { title?: string } = {};
   const trimmedTitle = title.trim();
 
-  if (templates.find((t) => t.title.trim().toLowerCase() === trimmedTitle.toLowerCase() && t.id !== selectedTemplateId)) {
+  if (
+    templates.find((t) => t.title.trim().toLowerCase() === trimmedTitle.toLowerCase() && t.id !== selectedTemplateId)
+  ) {
     errors.title = "Template title already present";
   } else if (!trimmedTitle) {
     errors.title = "Title cannot be empty";

@@ -37,7 +37,7 @@ const save = async (templates: Template[]) => {
   await LocalStorage.setItem(TEMPLATE_KEY, JSON.stringify(filtered));
 };
 
-const clear = async (id: string) => {
+const remove = async (id: string) => {
   const stored = await load();
   const updated = stored.filter((t) => t.id !== id);
   await save(updated);
@@ -47,5 +47,5 @@ export const templateService = {
   defaultTemplate,
   load,
   save,
-  clear,
+  remove,
 };

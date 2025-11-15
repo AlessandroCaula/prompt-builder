@@ -125,7 +125,6 @@ const PromptFormActions = ({ formState, templateState }: PromptFormActionsProp) 
             icon={Icon.Trash}
             style={Action.Style.Destructive}
             shortcut={{ modifiers: ["cmd", "shift"], key: "d" }}
-            // onAction={deleteTemplate}
             onAction={handleDeleteTemplate}
           />
           <Action
@@ -141,7 +140,7 @@ const PromptFormActions = ({ formState, templateState }: PromptFormActionsProp) 
       )}
 
       <Action
-        title="Clear All"
+        title="Clear Form"
         icon={Icon.Trash}
         style={Action.Style.Destructive}
         shortcut={{ modifiers: ["cmd"], key: "d" }}

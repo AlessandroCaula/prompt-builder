@@ -32,6 +32,7 @@ const PromptForm = () => {
   return (
     <Form
       navigationTitle="Prompt Builder"
+      enableDrafts
       actions={<PromptFormActions formState={formState} templateState={templateState} />}
     >
       <Form.Dropdown
