@@ -112,7 +112,7 @@ const PromptFormActions = ({ formState, templateState }: PromptFormActionsProp) 
       />
       <Action.Push
         title="Save as Template"
-        icon={Icon.SaveDocument}
+        icon={Icon.PlusSquare}
         shortcut={{ modifiers: ["cmd"], key: "s" }}
         target={
           <SaveTemplateForm
@@ -167,7 +167,6 @@ const PromptFormActions = ({ formState, templateState }: PromptFormActionsProp) 
       <Action
         title="Clear Form"
         icon={Icon.Eraser}
-        style={Action.Style.Destructive}
         shortcut={{ modifiers: ["cmd"], key: "d" }}
         onAction={async () => {
           resetFormValues();
