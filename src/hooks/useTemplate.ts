@@ -21,7 +21,7 @@ export const useTemplate = () => {
   const saveTemplates = async (updater: (prev: Template[]) => Template[]) => {
     const updatedTemplates = updater(templates);
     await save(updatedTemplates);
-    setTemplates([defaultTemplate, ...updatedTemplates.filter((t) => t.id !== "none")])
+    setTemplates([defaultTemplate, ...updatedTemplates.filter((t) => t.id !== "none")]);
   };
 
   // Add a new template

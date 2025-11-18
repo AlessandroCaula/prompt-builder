@@ -46,12 +46,12 @@ const remove = async (id: string) => {
 
 const removeAll = async () => {
   await LocalStorage.removeItem(TEMPLATE_KEY);
-}
+};
 
 export const templateService = {
   defaultTemplate,
   load,
   save,
   remove,
-  removeAll
+  removeAll,
 };

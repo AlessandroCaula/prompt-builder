@@ -19,8 +19,15 @@ import PreviewPrompt from "./PreviewPrompt";
 const PromptFormActions = ({ formState, templateState }: PromptFormActionsProp) => {
   const { push } = useNavigation();
   const { formValues, resetFormValues, setTaskError } = formState;
-  const { selectedTemplateId, setSelectedTemplateId, templates, addTemplate, updateTemplate, deleteTemplate, deleteAllTemplates } =
-    templateState;
+  const {
+    selectedTemplateId,
+    setSelectedTemplateId,
+    templates,
+    addTemplate,
+    updateTemplate,
+    deleteTemplate,
+    deleteAllTemplates,
+  } = templateState;
 
   const validateAndGetPrompt = (values: FormValues): string | undefined => {
     const errors = validateForm(values);

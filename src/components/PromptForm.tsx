@@ -17,7 +17,7 @@ const PromptForm = () => {
     updateTemplate,
     deleteTemplate,
     resetFormValues,
-    deleteAllTemplates
+    deleteAllTemplates,
   } = useTemplate();
 
   const formState = { formValues, resetFormValues, setTaskError };
@@ -41,7 +41,7 @@ const PromptForm = () => {
         title="Use Template"
         value={selectedTemplateId}
         onChange={(templateId) => {
-          openTemplate(templateId)
+          openTemplate(templateId);
         }}
       >
         {templates.map((template) => {
