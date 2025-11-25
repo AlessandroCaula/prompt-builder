@@ -139,7 +139,7 @@ const PromptFormActions = ({ formState, templateState }: PromptFormActionsProp) 
           <Action.Push
             title="Update Template"
             icon={Icon.Repeat}
-            shortcut={ isMac ? { modifiers: ["cmd"], key: "u" } : { modifiers: ["ctrl"], key: "u" }}
+            shortcut={isMac ? { modifiers: ["cmd"], key: "u" } : { modifiers: ["ctrl"], key: "u" }}
             target={
               <SaveTemplateForm
                 addTemplate={addTemplate}
@@ -190,7 +190,9 @@ const PromptFormActions = ({ formState, templateState }: PromptFormActionsProp) 
         title="Delete All Templates"
         icon={Icon.Trash}
         style={Action.Style.Destructive}
-        shortcut={isMac ? { modifiers: ["cmd", "shift", "opt"], key: "d" } : { modifiers: ["ctrl", "shift", "alt"], key: "d" }}
+        shortcut={
+          isMac ? { modifiers: ["cmd", "shift", "opt"], key: "d" } : { modifiers: ["ctrl", "shift", "alt"], key: "d" }
+        }
         onAction={handleDeleteAllTemplates}
       />
     </ActionPanel>
