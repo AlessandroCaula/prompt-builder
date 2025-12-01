@@ -1,5 +1,5 @@
-import ExportTemplate from "./components/ExportTemplate";
+import ExportTemplates from "./components/ExportTemplates";
 
 export default function Command() {
-  return <ExportTemplate />;
+  return <ExportTemplates />;
 }

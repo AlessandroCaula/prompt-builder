@@ -2,13 +2,14 @@ import { Action, ActionPanel, Form, Icon, popToRoot, showToast, Toast } from "@r
 import { useTemplate } from "../hooks/useTemplate";
 import fs from "fs";
 
-const ExportTemplate = () => {
+const ExportTemplates = () => {
   const { templates } = useTemplate();
   const filteredTemplates = templates.filter((t) => t.id !== "none");
 
   const handleExportTemplates = async (values: { folders: string[]; filename: string }) => {
     try {
-      const cleanTemplates = filteredTemplates.filter((t) => t.id !== "none").map(({ id, ...rest }) => rest);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const cleanTemplates = filteredTemplates.map(({ id, ...rest }) => rest);
 
       if (cleanTemplates.length === 0) {
         showToast({ title: "No Templates to Export", style: Toast.Style.Failure });
@@ -17,13 +18,14 @@ const ExportTemplate = () => {
 
       const folder = values.folders[0];
       if (!fs.existsSync(folder) || !fs.lstatSync(folder).isDirectory()) {
-        showToast({ title: "Folder not selected", style: Toast.Style.Failure });
+        showToast({ title: "Invalid Folder", style: Toast.Style.Failure });
         return;
       }
 
       const templatesContent = JSON.stringify(cleanTemplates, null, 2);
-      let filename = values.filename || "prompt-templates.json";
-      if (!filename.includes(".json")) filename = filename.concat(".json");
+      let filename = values.filename?.trim() || "prompt-templates.json";
+      if (!filename.endsWith(".json")) filename = filename.concat(".json");
+
       const templatesPath = `${folder}/${filename}`;
       await fs.promises.writeFile(templatesPath, templatesContent);
       await showToast({ title: "Templates exported", style: Toast.Style.Success });
@@ -38,7 +40,11 @@ const ExportTemplate = () => {
     <Form
       actions={
         <ActionPanel>
-          <Action.SubmitForm title="Export Templates" icon={{ source: Icon.Upload }} onSubmit={handleExportTemplates} />
+          <Action.SubmitForm
+            title="Export Templates"
+            icon={{ source: Icon.Download }}
+            onSubmit={handleExportTemplates}
+          />
         </ActionPanel>
       }
     >
@@ -61,4 +67,4 @@ const ExportTemplate = () => {
   );
 };
 
-export default ExportTemplate;
+export default ExportTemplates;
