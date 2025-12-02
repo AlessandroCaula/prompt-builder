@@ -21,7 +21,7 @@ export const useTemplate = () => {
   const saveTemplates = async (updater: (prev: Template[]) => Template[]) => {
     setTemplates((prev) => {
       const updated = updater(prev);
-      save(updated); // async but non-blocking
+      save(updated);
       return [defaultTemplate, ...updated.filter((t) => t.id !== "none")];
     });
   };
