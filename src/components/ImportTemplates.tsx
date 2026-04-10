@@ -8,10 +8,11 @@ const ImportTemplates = () => {
   const { templates, addTemplate } = useTemplate();
 
   const dedupeTitle = (title: string, existing: string[]) => {
-    if (!existing.includes(title)) return title;
+    const existingLower = existing.map((t) => t.toLowerCase());
+    if (!existingLower.includes(title.toLowerCase())) return title;
     let counter = 1;
     let newTitle = `${title} (${counter})`;
-    while (existing.includes(newTitle)) {
+    while (existingLower.includes(newTitle.toLowerCase())) {
       counter++;
       newTitle = `${title} (${counter})`;
     }
@@ -42,6 +43,11 @@ const ImportTemplates = () => {
         return;
       }
 
+      if (imported.length === 0) {
+        showToast({ title: "No Templates Found in File", style: Toast.Style.Failure });
+        return;
+      }
+
       const existingTitles = templates.map((t) => t.title);
       let countImported = 0;
       let countValidated = 0;
@@ -63,14 +69,16 @@ const ImportTemplates = () => {
             await new Promise((resolve) => setTimeout(resolve, 50));
           } catch (error) {
             console.log(error);
-            showToast({ title: "Invalid JSON format", style: Toast.Style.Failure });
+            showToast({ title: "Failed to save template", style: Toast.Style.Failure });
           }
         } else {
           console.log("Skipped imported Template: \n", entry);
           continue;
         }
       }
-      if (countValidated === countImported) {
+      if (countValidated === 0) {
+        showToast({ title: "No Valid Templates Found", style: Toast.Style.Failure });
+      } else if (countValidated === countImported) {
         showToast({ title: "All Templates Successfully Imported", style: Toast.Style.Success });
       } else {
         showToast({

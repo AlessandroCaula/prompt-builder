@@ -52,6 +52,9 @@ const ExportTemplates = () => {
         <Form.Description text="No templates to export. Create a new template before exporting" />
       ) : (
         <>
+          <Form.Description
+            text={`${filteredTemplates.length} template${filteredTemplates.length === 1 ? "" : "s"} will be exported`}
+          />
           <Form.FilePicker
             id="folders"
             title="Choose Export Folder"

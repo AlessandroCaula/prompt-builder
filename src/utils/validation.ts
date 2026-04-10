@@ -1,4 +1,4 @@
-import { Creativity, creativity, FormValues, Template, Tone, tones } from "../types";
+import { Creativity, creativity, FormValues, Tone, tones, Template } from "../types";
 
 export const validateForm = (values: FormValues) => {
   const errors: { task?: string } = {};
@@ -42,7 +42,7 @@ const TEMPLATE_KEYS = [
   "noEmDash",
 ];
 
-export const validateTemplate = (obj: unknown): obj is Template => {
+export const validateTemplate = (obj: unknown): obj is Omit<Template, "id"> => {
   if (typeof obj !== "object" || obj === null) return false;
 
   const template = obj as Record<string, unknown>;
