@@ -5,7 +5,7 @@ import { useTemplate } from "../hooks/useTemplate";
 import { validateTemplate } from "../utils/validation";
 
 const ImportTemplates = () => {
-  const { templates, addTemplate } = useTemplate();
+  const { templates, addTemplates } = useTemplate();
 
   const dedupeTitle = (title: string, existing: string[]) => {
     const existingLower = existing.map((t) => t.toLowerCase());
@@ -49,40 +49,31 @@ const ImportTemplates = () => {
       }
 
       const existingTitles = templates.map((t) => t.title);
-      let countImported = 0;
-      let countValidated = 0;
+      const batch: { title: string; values: FormValues }[] = [];
 
       for (const entry of imported) {
-        countImported++;
-
-        // Validate the template
         if (validateTemplate(entry)) {
           const { title, ...rest } = entry as Omit<Template, "id">;
-          const formValues: FormValues = rest;
-
           const uniqueTitle = dedupeTitle(title, existingTitles);
-
-          try {
-            await addTemplate(uniqueTitle, formValues);
-            existingTitles.push(uniqueTitle);
-            countValidated++;
-            await new Promise((resolve) => setTimeout(resolve, 50));
-          } catch (error) {
-            console.log(error);
-            showToast({ title: "Failed to save template", style: Toast.Style.Failure });
-          }
+          existingTitles.push(uniqueTitle);
+          batch.push({ title: uniqueTitle, values: rest });
         } else {
           console.log("Skipped imported Template: \n", entry);
-          continue;
         }
       }
-      if (countValidated === 0) {
+
+      if (batch.length === 0) {
         showToast({ title: "No Valid Templates Found", style: Toast.Style.Failure });
-      } else if (countValidated === countImported) {
+        return;
+      }
+
+      await addTemplates(batch);
+
+      if (batch.length === imported.length) {
         showToast({ title: "All Templates Successfully Imported", style: Toast.Style.Success });
       } else {
         showToast({
-          title: `Successfully Imported ${countValidated}/${countImported} Templates`,
+          title: `Successfully Imported ${batch.length}/${imported.length} Templates`,
           style: Toast.Style.Success,
         });
       }

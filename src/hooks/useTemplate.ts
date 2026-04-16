@@ -35,6 +35,17 @@ export const useTemplate = () => {
     return id;
   };
 
+  // Add multiple templates at once (batch import)
+  const addTemplates = async (batch: { title: string; values: FormValues }[]) => {
+    const ts = new Date().getTime();
+    const newTemplates: Template[] = batch.map(({ title, values }, i) => ({
+      ...values,
+      title,
+      id: `${ts}_${i}`,
+    }));
+    await saveTemplates((prev) => [...prev, ...newTemplates]);
+  };
+
   // Update existing template
   const updateTemplate = async (id: string, title: string, values: FormValues) => {
     const updatedTemplate: Template = { ...values, title, id };
@@ -90,6 +101,7 @@ export const useTemplate = () => {
     handleChange,
     openTemplate,
     addTemplate,
+    addTemplates,
     updateTemplate,
     deleteTemplate,
     resetFormValues,
